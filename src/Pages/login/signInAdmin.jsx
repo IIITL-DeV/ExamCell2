@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core';
 import { Alert } from '@mui/material';
 import { useAuth } from '../Context/AuthContext';
 import useMounted from '../hooks/useMounted';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles({
 
@@ -27,12 +27,11 @@ const useStyles = makeStyles({
 })
 
 
-const SignIn = () => {
+const SignInAdmin = () => {
 
     const classes = useStyles()
 
   const history = useHistory()
-  const location = useLocation()
   
     const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -43,15 +42,7 @@ const SignIn = () => {
   const mounted = useMounted()
 
       
-  function handleRedirectToOrBack() {
-    // console.log(location?.state)
-    history.replace(location.state?.from ?? '/')
-    // if (location.state) {
-    //   history.replace(location.state?.from)
-    // } else {
-    //   history.replace('/profile')
-    // }
-  }
+     
   
 
   const paperStyle = {padding:20,height:'70vh',width:"400px",marin:"20px auto"}
@@ -66,42 +57,7 @@ const SignIn = () => {
           <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
           <Typography variant="h4"> Sign In</Typography>
           </Grid>
-          <form
-          onSubmit={async e => {
-            e.preventDefault()
-            if (!loginEmail || !loginPassword) {
-              // toast({
-              //   description: 'Credentials not valid.',
-              //   status: 'error',
-              //   duration: 9000,
-              //   isClosable: true,
-              // })
-              return
-            }
-            // your login logic here
-            setIsSubmitting(true)
-            login(loginEmail, loginPassword)
-              .then(res => {
-                handleRedirectToOrBack()
-              })
-              .catch(error => {
-                console.log(error.message)
-                // toast({
-                //   description: error.message,
-                //   status: 'error',
-                //   duration: 9000,
-                //   isClosable: true,
-                // })
-              })
-              .finally(() => {
-                // setTimeout(() => {
-                //   mounted.current && setIsSubmitting(false)
-                //   console.log(mounted.current)
-                // }, 1000)
-                mounted.current && setIsSubmitting(false)
-              })
-          }}
-          >
+
           <TextField
             color="secondary"
             variant="filled"
@@ -124,9 +80,43 @@ const SignIn = () => {
             fullWidth
             type="password"
           />
-          <Button className={classes.btn} type="submit" color="secondary"
-            fullWidth> Login </Button>
-            </form>
+          <Button className={classes.btn} type="submit" color="secondary" onSubmit={async e => {
+            console.log('Clicked!')
+            e.preventDefault()
+            // your login logic here
+            if (!loginEmail || !loginPassword) {
+              // toast({
+              //   description: "Credentials Not Valid",
+              //   status: 'error',
+              //   duration: 5000,
+              //   isClosable:true
+              // })
+              console.log("Invalid Input")
+              alert("Invalid Input!");
+            }
+            
+            
+            setIsSubmitting(true)
+            login(loginEmail, loginPassword)
+              .then((res) => {
+                console.log(res)
+                history.push('/profile')
+              })
+              .catch((err) => {
+                console.log(err.message)
+              //   toast({
+              //   description: err.message,
+              //   status: 'error',
+              //   duration: 5000,
+              //   isClosable:true
+              // })
+                alert("Invalid Input!")
+              })
+              .finally(() => { mounted.current && setIsSubmitting(false) })
+            
+
+          }}
+            fullWidth> Login Now</Button>
           
           <Typography gutterBottom color="secondary" variant="body2">Forgot password? Contact Admin at ECAdmin@iiitl.ac.in</Typography>
           
@@ -138,7 +128,7 @@ const SignIn = () => {
       )
   }
   
-  export default SignIn
+  export default SignInAdmin
   
 
 

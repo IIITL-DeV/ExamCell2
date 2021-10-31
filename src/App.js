@@ -12,18 +12,19 @@ import SignUp from './Pages/SignUp';
 import Admin from './Pages/Admin';
 import Student from './Pages/Student';
 import Faculty from './Pages/Faculty';
-import AddMarks from './Components/AddMarks';
-import ResolveQuery from './Components/ResolveQuery';
-import CheckResult from './Components/CheckResult';
-import SubmitQuery from './Components/SubmitQuery';
+import AddMarks from './Components/Faculty/AddMarks';
+import ResolveQuery from './Components/Faculty/ResolveQuery';
+import CheckResult from './Components/Student/CheckResult';
+import SubmitQuery from './Components/Student/SubmitQuery';
 import LayoutStudent from './Components/LayoutStudent';
 import AuthProvider from './Context/AuthContext';
-import AddNotice from './Components/AddNotice';
-import EditToppers from './Components/EditToppers';
-import EditFaculties from './Components/EditFaculties';
-import CheckResultAdmin from './Components/CheckResultAdmin';
-import EditStudents from './Components/EditStudents';
+import AddNotice from './Components/Admin/AddNotice';
+import EditToppers from './Components/Admin/EditToppers';
+import EditFaculties from './Components/Admin/EditFaculties';
+import CheckResultAdmin from './Components/Admin/CheckResultAdmin';
+import EditStudents from './Components/Admin/EditStudents';
 import LayoutAdmin from './Components/LayoutAdmin';
+import Layout from './Components/Layout';
 
 const theme = createTheme({
   palette: {
@@ -45,9 +46,9 @@ const App = () => {
   return (
     
     <ThemeProvider theme={theme}>
-    <Router>
-      <Switch>
-        
+      <Router>
+        <Layout>
+          <Switch>
           <Route path="/about">
           <About/>
           </Route>
@@ -123,6 +124,7 @@ const App = () => {
           </Route>
           
     </Switch>
+    </Layout>
       </Router>
       </ThemeProvider>
       

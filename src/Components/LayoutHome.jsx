@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => {
   }
 })
 
-export default function Layout({ children }) {
+export default function LayoutHome({ children }) {
   const classes = useStyles()
   const history = useHistory()
   const location = useLocation()

@@ -1,6 +1,5 @@
 import { Avatar, Card, CardContent, CardHeader, CardMedia, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core'
-import { autocompleteClasses } from '@mui/material'
 import React from 'react'
 
 const useStyles = makeStyles({
@@ -22,7 +21,7 @@ const TopperCard = ({ topperdata }) => {
     const classes = useStyles();
 
     return (
-        <Card elevation={ 5} className={classes.card}>
+        <Card elevation={ 7} className={classes.card}>
             
             <CardHeader
                 className={classes.head}
@@ -34,7 +33,7 @@ const TopperCard = ({ topperdata }) => {
             <CardMedia
                 className={classes.img}
                 component="img"
-                image={topperdata.photo}
+                image={topperdata.link}
                 alt={topperdata.name}
             />
             <Avatar

@@ -1,14 +1,38 @@
 import React, { useState } from 'react'
-import { Button, Container, Divider, Grid, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Button, Container, Divider, Grid, makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import ResQuery from './ResQuery';
-import { ArrowRight, KeyboardArrowRightRounded } from '@material-ui/icons';
+import { KeyboardArrowRightRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles({
+    card: {
+        margin:"50px 8%",
+        padding: "10px",
+    },
     field: {
         marginTop: 20,
         marginBottom: 20,
-        display: 'block',
-        background:'#fbecfd'
+        display: 'block'
+    },
+    label: {
+        backgroundColor: "#fff",
+        padding: "auto",
+    },
+    center: {
+        textAlign: "center",
+        margin: "auto 5%",
+        padding: "5px",
+        marginTop: "20px",
+        background: "#fde2f7",
+        borderRadius:"50px"
+    },
+    heading: {
+        margin:"5px 35%",
+        padding: "10px",
+    },
+    formArea: {
+        backgroundColor: "#f7c4e6",
+        padding: "auto",
+        borderRadius:"70px"
     }
 })
 
@@ -58,34 +82,46 @@ const SubmitQuery = () => {
 
     return (
         <Container size="sm">
-            <Typography
-                variant="h5"
-                color="textSecondary"
-                component="h2"
-                gutterBottom
-            >
-            Submit a New Query.
-            </Typography>
-
+            <div className={classes.formArea}>
+            <Paper
+                    elevation={5}
+                className={classes.heading}
+                >
+                    <Typography color="secondary" variant="h4" align="center">
+                        Add New Query
+                    </Typography>
+                </Paper>
+                <div className={classes.center}>
+                    <Paper elevation={5} className={classes.card}>
             <form
                 noValidate
                 autoComplete="off"
                 onSubmit={handleSubmit}
             >
-            <TextField className={classes.field}
+            <TextField
+                            InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }}  className={classes.field}
           onChange={(e) => setTitle(e.target.value)}
           label="Subject Code" 
-          variant="filled"
+          variant="outlined"
           color="secondary" 
           fullWidth
           required
         //   error={titleError}
                 />
 
-            <TextField className={classes.field}
+            <TextField
+                            InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }}  className={classes.field}
           onChange={(e) => setTitle(e.target.value)}
           label="Query Title" 
-          variant="filled" 
+          variant="outlined" 
           color="secondary" 
           fullWidth
           required
@@ -94,10 +130,15 @@ const SubmitQuery = () => {
                 
                
                 
-           <TextField className={classes.field}
+           <TextField
+                            InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }}  className={classes.field}
           onChange={(e) => setDetails(e.target.value)}
           label="Details"
-          variant="standard"
+          variant="outlined"
           color="secondary"
           multiline
           rows={4}
@@ -115,7 +156,10 @@ const SubmitQuery = () => {
                 </Button>
                 
             </form>
-            
+            </Paper>
+            </div>
+            </div>
+
             <Divider className={classes.field} />
 
             <Typography

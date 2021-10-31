@@ -1,14 +1,14 @@
-import { Avatar, Container, Divider, Grid, Icon, Paper, Typography } from '@material-ui/core'
+import {  Container, Divider, Grid,  Paper, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import Layout from '../Components/LayoutHome'
 import Marquee from 'react-double-marquee'
 import TopperCard from '../Components/TopperCard'
 import { makeStyles } from '@material-ui/core'
 import newlogo from '../Assets/new_flash.gif'
-import Navbar from '../Components/Navbar'
-import { maxHeight } from '@mui/system'
+import Layout from '../Components/Layout'
 
- 
+import {db} from '../init-firebase'
+import {collection,getDocs} from 'firebase/firestore' 
+
 
 const useStyles = makeStyles({
     topperSec: {
@@ -52,35 +52,46 @@ const toppers = [
     }
 ]
 
-const notice = [
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice",
-      "This is an examle of notice"
-]
 
 
 
 const Home = () => {
 
     
+    const [newNotices, setNewNotices] = useState([])
+    const [newToppers, setNewToppers] = useState([])
+    const noticeCollectionRef = collection(db,"notices")
+    const toppersCollectionRef = collection(db,"toppers")
 
     const classes = useStyles();
+
+    useEffect(() => {
+        const getNotices = async () => {
+            const data = await getDocs(noticeCollectionRef)
+            // console.log(data);
+            setNewNotices(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        };
+
+        const getToppers = async () => {
+            const data = await getDocs(toppersCollectionRef)
+            // console.log(data);
+            setNewToppers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        };
+
+                
+
+        getNotices();
+        getToppers();
+        
+            
+    }, [])
+
+    newNotices.sort(function(a,b){return b.new-a.new});
+            // console.log(newNotices)
 
 
     return (
         <>
-            <Navbar />
             <div className={classes.toolbar}></div>
         <Container>
             
@@ -113,10 +124,10 @@ const Home = () => {
                         }}>
                     
                         
-                            {notice.map(note => (
-                                <Marquee direction={"left"} delay={'1'}>
-                                    {note}
-                                    <img alt="new" className={classes.gif} src={newlogo}/>
+                            {newNotices.map(note => (
+                                <Marquee direction={"left"} delay={'1'} key={note.id}>
+                                    {note.body}
+                                    {note.new && <img alt="new" className={classes.gif} src={newlogo} /> }
                                     
                 </Marquee>       
                                 
@@ -138,8 +149,8 @@ const Home = () => {
                     </Typography>
                     <Grid container spacing={3}>
                     
-                        {toppers.map(top => (
-                            <Grid item xs={12} md={6} lg={4} key={top.id}>
+                        {newToppers.map(top => (
+                            <Grid item xs={12} md={6} lg={6} key={top.id}>
                                 <TopperCard topperdata={top}/>
                             </Grid>
 
@@ -152,7 +163,7 @@ const Home = () => {
 
             </Grid>
 
-            </Container>
+                </Container>
             </>
     )
 }

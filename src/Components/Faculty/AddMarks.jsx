@@ -1,7 +1,7 @@
-import { Button, FormControl, Grid, InputLabel, makeStyles, MenuItem, Select, TextField, Typography } from '@material-ui/core'
+import { Button, FormControl, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Typography } from '@material-ui/core'
 import { CheckCircleRounded, Keyboard } from '@material-ui/icons'
 import React, { useState } from 'react'
-import LayoutFaculty from './LayoutFaculty'
+import LayoutFaculty from '../LayoutFaculty'
 
 
 const sem = [
@@ -41,11 +41,48 @@ const sem = [
 ]
 
 const useStyles = makeStyles({
-    field: {
-      marginTop: 20,
-      marginBottom: 20,
-      display: 'block'
-    }
+  card: {
+    margin:"50px 8%",
+    padding: "20px" 
+},
+field: {
+    margin: "15px 10px",
+    padding:"auto"
+},
+btn: {
+    margin: "10px auto",
+    padding: "10px 10px",
+    display: "flex",
+    alignSelf: "centre",
+    width:"40%"
+},
+photofile: {
+    border: "2px solid #d500f9",
+    display: "flex",
+    padding: '6px 6px',
+    cursor: 'pointer',
+    margin: "auto 10px",
+    backgroundColor: "#edb6f7",
+    
+},
+center: {
+    textAlign: "center",
+    margin: "auto",
+    padding:"10px"
+},
+heading: {
+    margin:"auto 35%",
+    padding: "10px"
+},
+label: {
+    backgroundColor: "white",
+    padding: "auto",
+},
+formArea: {
+    backgroundColor: "#f7c4e6",
+    padding: "auto",
+    borderRadius:"70px"
+}
 })
 
 const AddMarks = () => {
@@ -81,18 +118,24 @@ const AddMarks = () => {
 
 
     return (
-        <LayoutFaculty>
-            <Typography variant="h4" gutterBottom>AddMarks</Typography>
-            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+      <LayoutFaculty>
+        <div className={classes.formArea}>
+        <Paper className={classes.heading}>
+            <Typography align="center" variant="h4" gutterBottom>AddMarks</Typography>
+        </Paper>
+        <Paper className={classes.card}>
+        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
 
             <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Batch</InputLabel>
+                <InputLabel
+                  style={{color:"#d500f9"}} >Batch</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={batch}
           label="Age"
-          onChange={handleBatch}
+                  onChange={handleBatch}
+                  variant="outlined"
         >
           <MenuItem value={2018}>2018</MenuItem>
           <MenuItem value={2019}>2019</MenuItem>
@@ -103,12 +146,15 @@ const AddMarks = () => {
       </FormControl>
 
         <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Semester</InputLabel>
-        <Select
+                <InputLabel
+                  style={{color:"#d500f9"}} id="demo-simple-select-label">Semester</InputLabel>
+                <Select
+                  variant="outlined"
+                  // className={classes.field}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={semester}
-          label="Age"
+          label="Se"
           onChange={handleSemester}
                 >
                     {sem.map(s => (
@@ -120,7 +166,11 @@ const AddMarks = () => {
         </Select>
             </FormControl>
             
-      <TextField className={classes.field}
+      <TextField InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }} className={classes.field}
           onChange={(e) => setSubject(e.target.value)}
           label="Subject Code" 
           variant="outlined" 
@@ -130,7 +180,11 @@ const AddMarks = () => {
         //   error={titleError}
             />
 
-        <TextField className={classes.field}
+        <TextField InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }} className={classes.field}
           onChange={(e) => setRoll(e.target.value)}
           label="Enrollment No." 
           variant="outlined" 
@@ -140,7 +194,11 @@ const AddMarks = () => {
         //   error={titleError}
         />    
 
-      <TextField className={classes.field}
+      <TextField InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }} className={classes.field}
           onChange={(e) => setObtained(e.target.value)}
           label="Obtained Marks" 
           variant="outlined" 
@@ -150,7 +208,11 @@ const AddMarks = () => {
         //   error={titleError}
         />
             
-      <TextField className={classes.field}
+      <TextField InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }} className={classes.field}
           onChange={(e) => setTotal(e.target.value)}
           label="Total Marks" 
           variant="outlined" 
@@ -159,15 +221,18 @@ const AddMarks = () => {
           required
         //   error={titleError}
         />
-
+      <div className={classes.center}>
       <Button
           type="submit" 
           color="secondary" 
           variant="contained"
           endIcon={<CheckCircleRounded />}>
           Submit
-        </Button>      
+              </Button>
+        </div>      
       </form>
+      </Paper>
+      </div>
         </LayoutFaculty>
     )
 }

@@ -1,7 +1,7 @@
 import { Container, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography ,Button, Grid, Divider } from '@material-ui/core'
 import { useReactToPrint } from 'react-to-print';
 import React, { useRef } from 'react'
-import avatarResult from '../Assets/avtarResult.jpg'
+// import avatarResult from '../Assets/avtarResult.jpg'
 import DownloadingIcon from '@mui/icons-material/Downloading';
 
 function createData(name, calories, fat, carbs, protein) {
@@ -36,9 +36,9 @@ const rows = [
       justifyContent:"centre"
     },
     detail: {
-      width: "100%",
+      width: "60%",
       display: "flex",
-      padding:"20px" ,
+      padding:"5px" ,
       justifyContent:"centre"
     },
     btn: {
@@ -47,6 +47,19 @@ const rows = [
       display: 'flex',
       padding:"20px" ,
       justifyContent: 'center'
+    },
+    center: {
+      padding: "2px",
+      display:"flex",
+      justifyContent:"center",
+      widht: "50%",
+      border: "2px solid black",
+      borderRadius:"15px"
+    },
+    divs: {
+      // display: "inline-block",
+      padding: "10% auto",
+      margin:"auto 5%"
     }
     
 })
@@ -71,21 +84,21 @@ const ResultForm = () => {
         
         <div ref={componentRef} >
           
-        <Paper className={classes.detailCard} elevation={3}>  
-        <Grid container spacing={5} >
-              <Grid item xs={12} sm={ 6} md={6} lg={6} className={classes.detailCard} >
-                <Typography variant="h6"  gutterBottom>Name : Ram Singh</Typography>
-            <Divider/>    
-            <Typography variant="h6"  gutterBottom>Roll No : LXY12345</Typography>    
-            <Divider/>    
-            <Typography gutterBottom variant="h6" >Semester No. : 5</Typography>    
-            <Divider/>    
-            <Typography gutterBottom variant="h6" > CGPA : 8.9</Typography>    
-          </Grid>    
-            <Grid item xs={12} sm={ 6} md={6} lg={6} className={classes.img}>
-              <img style={{width:"100%",border:"1px solid black"}} alt="img" src={avatarResult}/>
-          </Grid>    
-        </Grid> 
+          <Paper className={classes.detailCard} elevation={3}>
+        <div className={classes.center}>    
+        
+              <div  >
+                <h5>Name: Ram Singh</h5>
+                <h5>Batch: CS 2019</h5>
+                <h5>Roll No. : LCS2019099 </h5>
+                <h5>CGPA: 8.7 </h5>
+                <h5>Semester: 4 </h5>
+              </div>
+              <div className={classes.divs}>
+                <img src={ "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiHtdakfs0OGh1nAVPxfxSzZQ6_ahfebaLKg&usqp=CAU"} style={{width:"120px", height:"120px",border:"2px solid black"}} alt="img"/>
+              </div>
+          
+        </div>
         </Paper> 
 
         <TableContainer component={Paper}>

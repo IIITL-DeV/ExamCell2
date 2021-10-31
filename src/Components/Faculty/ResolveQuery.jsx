@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@material-ui/core'
 import React from 'react'
-import LayoutFaculty from './LayoutFaculty'
-import Query from './Query'
+import LayoutFaculty from '../LayoutFaculty'
+import Query from '../Student/Query'
 
 
 const queryArr = [
