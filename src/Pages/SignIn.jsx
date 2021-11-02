@@ -1,142 +1,69 @@
-import React from 'react'
-import { useState } from 'react'
-import { signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword , onAuthStateChanged} from 'firebase/auth';
-import { auth } from '../init-firebase'
-import {Container, TextField, Typography} from '@material-ui/core'
-import { Button, Grid, Paper, Avatar } from '@material-ui/core'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { makeStyles } from '@material-ui/core';
-import { Alert } from '@mui/material';
-import { useAuth } from '../Context/AuthContext';
-import useMounted from '../hooks/useMounted';
-import { useHistory, useLocation } from 'react-router';
+import React, { useRef ,useState } from 'react'
+import { useHistory } from 'react-router';
+import {logout,signup,useAuth,login} from '../init-firebase'
 
-const useStyles = makeStyles({
-
-  btn: {
-    backgroundColor: "#e87dfa",
-    margin: "4vh auto"
-  },
-  inp: {
-    margin:"20px auto"
-  },
-  grid: {
-    marginTop:"20vh"
-  }
-
-})
 
 
 const SignIn = () => {
 
-    const classes = useStyles()
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
-  const history = useHistory()
-  const location = useLocation()
+  const history = useHistory();
+
+  const [loading, setLoading] = useState(false);
+
+  const currentUser = useAuth();
+
+  async function handleSignup() {
+    setLoading(true);
+      try {
+        const cred = await signup(emailRef.current.value, passwordRef.current.value);
+        history.push('/');
+      } catch {
+        alert("Already exists!")
+    }
+    setLoading(false);
+  }  
   
-    const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [isSubmitting,setIsSubmitting] = useState(false)
+  async function handleLogout() {
+    setLoading(true);
+    try {
+      await logout();
+    } catch {
+      alert("Error!")
+    }
+    setLoading(false);
+  }
 
-  const { login } = useAuth()
-  
-  const mounted = useMounted()
+  async function handleLogin() {
+    setLoading(true);
+    try {
+      await login(emailRef.current.value, passwordRef.current.value);
+      history.push('/');
+    } catch {
+      alert("Error!")
+    }
+    setLoading(false);
+  }
 
+    return (
+          <div>
+        <div style={{ margin: "20px", padding: "10px" }} className="signup">
+        <input style={{ margin: "20px", padding: "10px" }} ref={emailRef} placeholder="Email"/>
+        <input style={{ margin: "20px", padding: "10px" }} ref={passwordRef} type="password" placeholder="Password"/>
+          <button disabled={loading || currentUser} onClick={handleSignup}> Sign Up</button>
+          
+          
+          <div style={{ margin: "20px", padding: "10px" }}><h2>current User is : {currentUser?.email} </h2></div>
+          <button disabled={!currentUser || loading} onClick={handleLogout}> Log Out</button>
+          
+          <button disabled={currentUser || loading} onClick={handleLogin}> Log In</button>
+    </div>
       
-  function handleRedirectToOrBack() {
-    // console.log(location?.state)
-    history.replace(location.state?.from ?? '/')
-    // if (location.state) {
-    //   history.replace(location.state?.from)
-    // } else {
-    //   history.replace('/profile')
-    // }
-  }
-  
-
-  const paperStyle = {padding:20,height:'70vh',width:"400px",marin:"20px auto"}
-  
-  const avatarStyle = {backgroundColor:'#d500f9'}
-  return (
-    <Container>
-      <Grid align= 'center' className={classes.grid}>
-        <Paper elevation={10} style={paperStyle}>
-          
-          <Grid align='center' >
-          <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
-          <Typography variant="h4"> Sign In</Typography>
-          </Grid>
-          <form
-          onSubmit={async e => {
-            e.preventDefault()
-            if (!loginEmail || !loginPassword) {
-              // toast({
-              //   description: 'Credentials not valid.',
-              //   status: 'error',
-              //   duration: 9000,
-              //   isClosable: true,
-              // })
-              return
-            }
-            // your login logic here
-            setIsSubmitting(true)
-            login(loginEmail, loginPassword)
-              .then(res => {
-                handleRedirectToOrBack()
-              })
-              .catch(error => {
-                console.log(error.message)
-                // toast({
-                //   description: error.message,
-                //   status: 'error',
-                //   duration: 9000,
-                //   isClosable: true,
-                // })
-              })
-              .finally(() => {
-                // setTimeout(() => {
-                //   mounted.current && setIsSubmitting(false)
-                //   console.log(mounted.current)
-                // }, 1000)
-                mounted.current && setIsSubmitting(false)
-              })
-          }}
-          >
-          <TextField
-            color="secondary"
-            variant="filled"
-            className={classes.inp}
-            label="Email" 
-            placeholder="Enter Email"
-            onChange={(e) => { setLoginEmail(e.target.value) }}
-            fullWidth
-            required
-            type="email"
-          />
-          <TextField
-            color="secondary"
-            variant="filled"
-            className={classes.inp}
-            label="Password"
-            placeholder="Enter Password"
-            onChange={(e) => { setLoginPassword(e.target.value) }}
-            required
-            fullWidth
-            type="password"
-          />
-          <Button className={classes.btn} type="submit" color="secondary"
-            fullWidth> Login </Button>
-            </form>
-          
-          <Typography gutterBottom color="secondary" variant="body2">Forgot password? Contact Admin at ECAdmin@iiitl.ac.in</Typography>
-          
-          </Paper>
-      </Grid>
-       
-      </Container>
-
+  </div>
       )
-  }
+    }
   
   export default SignIn
   

@@ -6,8 +6,8 @@ import { useHistory } from 'react-router'
 
 import { styled } from '@mui/material/styles';
 import { Paper } from '@mui/material';
-import { useAuth } from '../Context/AuthContext';
-import {Box} from '@mui/material'
+import { Box } from '@mui/material'
+import { logout ,useAuth} from '../init-firebase';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -32,28 +32,41 @@ const Layout = ({children}) => {
 
     const classes = useStyles();
     const history = useHistory();
-    const { currentUser,logout } = useAuth();
+    const currentUser = useAuth();
+
+    async function handleLogout() {
+        // setLoading(true);
+        try {
+            await logout();
+            history.push('/')
+        } catch {
+          alert("Error!")
+        }
+        // setLoading(false);
+      }
 
     return (
         <>
+           
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{background:"#f9f1f9"}}>
+      <AppBar elevation={3} position="static" style={{background:"d500f9"}}>
     <Toolbar>
                         <Button variant="text"
                             onClick={()=>history.push('/')}
                         >
-            <Typography variant="h4">
+            <Typography variant="h3">
                 ExamCell
                             </Typography>
           </Button>
-                            <div style={{flexGrow:1}}></div>
-         {!currentUser && <Button onClick={()=>history.push('/signin')} variant="text">Login</Button>}
-                        {currentUser
-                         && <Button onClick={() => history.push('/signin')} variant="text">Logout</Button>}
+                        <div style={{ flexGrow: 1 }}></div>
+                        {currentUser && <Button>My Section</Button> }
+                        {!currentUser && <Button onClick={() => history.push('/signin')}>Login</Button>}
+                        {currentUser && <Button onClick={handleLogout} >Logout</Button>}
         </Toolbar>
       </AppBar>
     </Box>
-            <div>{children}</div>
+                <div>{children}</div>
+           
         </>
     )
 }

@@ -8,7 +8,6 @@ import About from './Pages/About';
 import Contact from './Pages/Contact';
 import Home from './Pages/Home';
 import SignIn from './Pages/SignIn';
-import SignUp from './Pages/SignUp';
 import Admin from './Pages/Admin';
 import Student from './Pages/Student';
 import Faculty from './Pages/Faculty';
@@ -57,14 +56,10 @@ const App = () => {
           <Contact/>
           </Route>
           
-          <Route path="/signIn">
+          <Route path="/signin">
           <SignIn/>
           </Route>
           
-          <Route path="/signUp">
-             <SignUp/>
-          </Route>
-
           <Route path="/admin">
           <Admin/>
           </Route>

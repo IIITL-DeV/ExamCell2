@@ -1,15 +1,12 @@
 import React from 'react'
-import { Button, makeStyles } from '@material-ui/core'
+import {  makeStyles } from '@material-ui/core'
 import Drawer from '@material-ui/core/Drawer'
-import Typography from '@material-ui/core/Typography'
 import { useHistory, useLocation } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { AddBoxRounded, AssessmentRounded, AssignmentIndOutlined, CloudDownloadOutlined, EditOutlined, EditRounded, FontDownload, QueryBuilderOutlined,  } from '@material-ui/icons'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
+import { AddBoxRounded,  AssignmentIndOutlined,  EditOutlined, EditRounded,   } from '@material-ui/icons'
  
 
 const drawerWidth = 240
@@ -17,21 +14,32 @@ const drawerWidth = 240
 const useStyles = makeStyles((theme) => {
   return {
     page: {
-      background: '#f9f9f9',
+      background: '#fefefe',
       width: '100%',
       padding: theme.spacing(3),
     },
     root: {
       display: 'flex',
-    },
+        overflow: "hidden" 
+     },
     drawer: {
-      width: drawerWidth,
-    },
+      width: drawerWidth+10,
+     },
     drawerPaper: {
-      width: drawerWidth,
+      position:"relative",
+      width: drawerWidth+10,
     },
     active: {
-      background: '#f4f4f4'
+      overflow:"hidden",
+      background: '#f7c4e6',
+      borderTopLeftRadius: "60px",
+      borderBottomLeftRadius: "60px",
+      borderTopRightRadius:"60px",
+      borderBottomRightRadius:"60px",
+      paddingLeft: "10px",
+      '&:hover': {
+        backgroundColor: '#f7c4e6',
+      }
     },
     title: {
       padding: theme.spacing(2),
@@ -83,24 +91,6 @@ export default function LayoutAdmin({ children }) {
 
   return (
     <div className={classes.root}>
-      {/* app bar */}
-      <AppBar 
-        position="fixed" 
-        className={classes.appBar}
-        elevation={0}
-        color="primary"
-      >
-        <Toolbar>
-          <Typography gutterBottom variant="h4" className={classes.date}>
-            Admin ID
-          </Typography>
-          <Button
-            variant="contained"
-            href="/signin"
-            color="secondary"
-          > Log Out</Button>
-        </Toolbar>
-      </AppBar>
 
       {/* side drawer */}
       <Drawer
@@ -109,11 +99,6 @@ export default function LayoutAdmin({ children }) {
         classes={{ paper: classes.drawerPaper }}
         anchor="left"
       >
-        <div>
-          <Typography variant="h2" className={classes.title}>
-                      ExamCell
-          </Typography>
-        </div>
 
         {/* links/list section */}
         <List>

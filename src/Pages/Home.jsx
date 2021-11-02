@@ -27,30 +27,30 @@ const useStyles = makeStyles({
     }
 })
 
-const toppers = [
-    {
-        id:'1',
-        name: "Lav Joshi",
-        batch: "Batch 2023",
-        cgpa: "9.61",
-        photo:"https://avatars.dicebear.com/api/male/bo.svg"
+// const toppers = [
+//     {
+//         id:'1',
+//         name: "Lav Joshi",
+//         batch: "Batch 2023",
+//         cgpa: "9.61",
+//         photo:"https://avatars.dicebear.com/api/male/bo.svg"
 
-    },
-    {
-        id:'2',
-        name: "Manish Pandey",
-        batch: "Batch 2022",
-        cgpa: "9.41",
-        photo:"https://avatars.dicebear.com/api/male/bmo.svg"
-    },
-    {
-        id:'3',
-        name: "Nishkarsh Shukla",
-        batch: "Batch 2021",
-        cgpa: "9.77",
-        photo:'https://avatars.dicebear.com/v2/male/7a991cbc556165d75108131e0f192843.svg'
-    }
-]
+//     },
+//     {
+//         id:'2',
+//         name: "Manish Pandey",
+//         batch: "Batch 2022",
+//         cgpa: "9.41",
+//         photo:"https://avatars.dicebear.com/api/male/bmo.svg"
+//     },
+//     {
+//         id:'3',
+//         name: "Nishkarsh Shukla",
+//         batch: "Batch 2021",
+//         cgpa: "9.77",
+//         photo:'https://avatars.dicebear.com/v2/male/7a991cbc556165d75108131e0f192843.svg'
+//     }
+// ]
 
 
 

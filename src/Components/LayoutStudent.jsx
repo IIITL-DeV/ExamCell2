@@ -1,16 +1,12 @@
 import React from 'react'
-import { Button, makeStyles } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import Drawer from '@material-ui/core/Drawer'
-import Typography from '@material-ui/core/Typography'
 import { useHistory, useLocation } from 'react-router-dom'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { AssessmentRounded, CloudDownloadOutlined, FontDownload, QueryBuilderOutlined,  } from '@material-ui/icons'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-
+import { AssessmentRounded,  QueryBuilderOutlined,  } from '@material-ui/icons'
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => {
@@ -27,10 +23,14 @@ const useStyles = makeStyles((theme) => {
       width: drawerWidth,
     },
     drawerPaper: {
+      position:"relative",
       width: drawerWidth,
     },
     active: {
-      background: '#f4f4f4'
+      marginLeft: "10px",
+      background: '#f7c4e6',
+      borderTopLeftRadius: "40px",
+      borderBottomLeftRadius:"40px"
     },
     title: {
       padding: theme.spacing(2),
@@ -66,24 +66,6 @@ export default function LayoutStudent({ children }) {
 
   return (
     <div className={classes.root}>
-      {/* app bar */}
-      <AppBar 
-        position="fixed" 
-        className={classes.appBar}
-        elevation={0}
-        color="primary"
-      >
-        <Toolbar>
-          <Typography variant="h4" className={classes.date}>
-            Student Roll Number
-          </Typography>
-          <Button
-            variant="contained"
-            href="/signin"
-            color="secondary"
-          > Log Out</Button>
-        </Toolbar>
-      </AppBar>
 
       {/* side drawer */}
       <Drawer
@@ -92,12 +74,7 @@ export default function LayoutStudent({ children }) {
         classes={{ paper: classes.drawerPaper }}
         anchor="left"
       >
-        <div>
-          <Typography gutterBottom variant="h3" className={classes.title}>
-                      ExamCell
-          </Typography>
-        </div>
-
+       
         {/* links/list section */}
         <List>
           {menuItemsStudent.map((item) => (
