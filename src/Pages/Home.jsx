@@ -7,7 +7,7 @@ import newlogo from '../Assets/new_flash.gif'
 import Layout from '../Components/Layout'
 
 import {db} from '../init-firebase'
-import {collection,getDocs} from 'firebase/firestore' 
+import {collection,onSnapshot,getDocs} from 'firebase/firestore' 
 
 
 const useStyles = makeStyles({
@@ -66,22 +66,24 @@ const Home = () => {
     const classes = useStyles();
 
     useEffect(() => {
-        const getNotices = async () => {
-            const data = await getDocs(noticeCollectionRef)
-            // console.log(data);
-            setNewNotices(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-        };
+        
 
-        const getToppers = async () => {
-            const data = await getDocs(toppersCollectionRef)
-            // console.log(data);
-            setNewToppers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-        };
+        onSnapshot(toppersCollectionRef, (snapshot) => {
+            setNewToppers(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        }
+        
+        )
+
+        onSnapshot(noticeCollectionRef, (snapshot) => {
+            setNewNotices(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        }
+        
+        )
 
                 
 
-        getNotices();
-        getToppers();
+        // getNotices();
+        // getToppers();
         
             
     }, [])
