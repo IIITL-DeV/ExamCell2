@@ -99,8 +99,11 @@ const EditStudents = () => {
             phone: phone,
             photo: photo,
             rollnum: rollnum
+                 
         });
 
+       
+        
         setOpen(true);
 
     }

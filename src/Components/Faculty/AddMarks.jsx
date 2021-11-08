@@ -1,6 +1,8 @@
+import { doc, updateDoc } from '@firebase/firestore'
 import { Button, FormControl, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Typography } from '@material-ui/core'
 import { CheckCircleRounded, Keyboard } from '@material-ui/icons'
 import React, { useState } from 'react'
+import { db } from '../../init-firebase'
 import LayoutFaculty from '../LayoutFaculty'
 
 
@@ -87,8 +89,7 @@ formArea: {
 
 const AddMarks = () => {
 
-    const [batch, setBatch] = React.useState('');
-    const [semester, setSemester] = React.useState('');
+    const [semester, setSemester] = React.useState('1');
 
     const [roll, setRoll] = useState('');
 
@@ -98,21 +99,38 @@ const AddMarks = () => {
     
     const [total,setTotal]=useState('')
 
-    const handleBatch = (event) => {
-      setBatch(event.target.value);
-    };
+   
     const handleSemester = (event) => {
       setSemester(event.target.value);
     };
 
     const classes = useStyles();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(batch);
+        console.log("push req made!");
         console.log(roll);
         console.log(subject);
         console.log(semester);
+
+
+        const rollPath = "students/" + roll + "/marks";
+        const semesterNum = "sem" + semester;
+        const docRef = doc(db, rollPath, semesterNum);
+        try {
+            await updateDoc(
+                docRef,
+                {
+                    [subject]: obtained
+                 } ,
+                { merge: true }
+            )
+            console.log("success!")
+        } catch {
+            alert("Error Occured!")
+        }
+
+
     
       }
 
@@ -126,26 +144,9 @@ const AddMarks = () => {
         <Paper className={classes.card}>
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
 
-            <FormControl fullWidth>
-                <InputLabel
-                  style={{color:"#d500f9"}} >Batch</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={batch}
-          label="Age"
-                  onChange={handleBatch}
-                  variant="outlined"
-        >
-          <MenuItem value={2018}>2018</MenuItem>
-          <MenuItem value={2019}>2019</MenuItem>
-          <MenuItem value={2020}>2020</MenuItem>
-          <MenuItem value={2021}>2021</MenuItem>
-          
-        </Select>
-      </FormControl>
+            
 
-        <FormControl fullWidth>
+        <FormControl className={classes.field} fullWidth>
                 <InputLabel
                   style={{color:"#d500f9"}} id="demo-simple-select-label">Semester</InputLabel>
                 <Select
@@ -172,7 +173,7 @@ const AddMarks = () => {
                                 }
                             }} className={classes.field}
           onChange={(e) => setSubject(e.target.value)}
-          label="Subject Code" 
+          label="Subject " 
           variant="outlined" 
           color="secondary" 
           fullWidth

@@ -24,6 +24,7 @@ import CheckResultAdmin from './Components/Admin/CheckResultAdmin';
 import EditStudents from './Components/Admin/EditStudents';
 import LayoutAdmin from './Components/LayoutAdmin';
 import Layout from './Components/Layout';
+import Test from './Pages/Test';
 
 const theme = createTheme({
   palette: {
@@ -58,6 +59,10 @@ const App = () => {
           
           <Route path="/signin">
           <SignIn/>
+            </Route>
+            
+          <Route path="/test">
+          <Test/>
           </Route>
           
           <Route path="/admin">

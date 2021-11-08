@@ -3,6 +3,7 @@ import {getAuth, createUserWithEmailAndPassword ,onAuthStateChanged,signOut,sign
 import {getFirestore} from '@firebase/firestore'
 import { useEffect, useState } from 'react';
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyAc4H2-0RmddJH9mz7IvJMmolSwTADR3uY",
   authDomain: "exam-cell-dev.firebaseapp.com",
@@ -17,7 +18,6 @@ export const app =  initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 
 export const db = getFirestore(app)
-
 
 export function signup(email, password) {
   return createUserWithEmailAndPassword(auth, email, password);
