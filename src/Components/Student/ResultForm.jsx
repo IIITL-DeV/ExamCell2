@@ -1,4 +1,4 @@
-import { Container, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography ,Button, Grid, Divider } from '@material-ui/core'
+import { Container, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography ,Button } from '@material-ui/core'
 import { useReactToPrint } from 'react-to-print';
 import React, { useRef } from 'react'
 // import avatarResult from '../Assets/avtarResult.jpg'
@@ -45,7 +45,6 @@ const rows = [
       padding: "20px auto",
       margin:"20px",
       display: 'flex',
-      padding:"20px" ,
       justifyContent: 'center'
     },
     center: {

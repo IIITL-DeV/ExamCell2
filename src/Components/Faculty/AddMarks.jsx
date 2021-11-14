@@ -1,6 +1,6 @@
 import { doc, updateDoc } from '@firebase/firestore'
-import { Button, FormControl, Grid, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Typography } from '@material-ui/core'
-import { CheckCircleRounded, Keyboard } from '@material-ui/icons'
+import { Button, FormControl, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Typography } from '@material-ui/core'
+import { CheckCircleRounded  } from '@material-ui/icons'
 import React, { useState } from 'react'
 import { db } from '../../init-firebase'
 import LayoutFaculty from '../LayoutFaculty'
@@ -214,7 +214,8 @@ const AddMarks = () => {
                                     root: classes.label
                                 }
                             }} className={classes.field}
-          onChange={(e) => setTotal(e.target.value)}
+                            onChange={(e) => setTotal(e.target.value)}
+                            value={total}
           label="Total Marks" 
           variant="outlined" 
           color="secondary" 

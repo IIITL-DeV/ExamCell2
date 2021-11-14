@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button, makeStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
-import { useHistory, useLocation } from 'react-router-dom' 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 
@@ -43,8 +42,7 @@ const useStyles = makeStyles((theme) => {
 
 export default function LayoutHome({ children }) {
   const classes = useStyles()
-  const history = useHistory()
-  const location = useLocation()
+  
 
 
   return (

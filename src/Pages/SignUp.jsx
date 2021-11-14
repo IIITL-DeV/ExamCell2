@@ -1,11 +1,12 @@
 import { Card, Grid, makeStyles, Paper, Typography ,Button } from '@material-ui/core';
 import React, { useContext, useRef ,useState } from 'react'
 import { useHistory } from 'react-router';
-import {useAuth,login} from '../init-firebase'
+import {useAuth, db} from '../init-firebase'
 import {BsFilePerson} from "react-icons/bs"
-import { FaChalkboardTeacher, FaUserShield } from "react-icons/fa"
+import { FaChalkboardTeacher  } from "react-icons/fa"
 
 import {UserContext} from '../Context/UserContext'
+import { collection, getDocs, query, where } from '@firebase/firestore';
 
 
 const useStyles = makeStyles({
@@ -37,7 +38,7 @@ const useStyles = makeStyles({
 
 
 
-const SignIn = () => {
+const SignUp = () => {
 
   
   const [role, setRole] = useState(null);
@@ -55,53 +56,64 @@ const SignIn = () => {
 
   const currentUser = useAuth();
 
-  // async function handleSignup() {
-  //   setLoading(true);
-  //     try {
-  //       const cred = await signup(emailRef.current.value, passwordRef.current.value);
-  //       history.push('/');
-  //     } catch {
-  //       alert("Already exists!")
-  //   }
-  //   setLoading(false);
-  // }  
-  
-  // async function handleLogout() {
-  //   setLoading(true);
-  //   try {
-  //     await logout();
-  //   } catch {
-  //     alert("Error!")
-  //   }
-  //   setLoading(false);
-  // }
+  async function handleSignup() {
+      setLoading(true);
+      console.log(user);
+      try {
+        
+          const collectionRef = collection(db,user);
+          const q = query(collectionRef, where("email", "==", emailRef.current.value));
+          
+          const snapshot = await getDocs(q);
 
-  async function handleLogin() {
-    setLoading(true);
-    try {
-      await login(emailRef.current.value, passwordRef.current.value);
-      history.push('/');
-    } catch {
-      alert("Error!")
+          if (snapshot.empty) {
+              alert("User Not Allowed!")
+          } else {
+            //   const cred = await signup(emailRef.current.value, passwordRef.current.value);
+              history.push('/');
+          }
+      } catch(err) {
+        alert(err.message)
     }
     setLoading(false);
-  }
+  }  
+  
+//   async function handleLogout() {
+//     setLoading(true);
+//     try {
+//       await logout();
+//     } catch {
+//       alert("Error!")
+//     }
+//     setLoading(false);
+//   }
+
+//   async function handleLogin() {
+//     setLoading(true);
+//     try {
+//       await login(emailRef.current.value, passwordRef.current.value);
+//       history.push('/');
+//     } catch {
+//       alert("Error!")
+//     }
+//     setLoading(false);
+//   }
 
 
 
-  const handleAdminLogin =  () => {
-    setRole("Admin");
-    setUser("Admin");
-    console.log(user);
-  }
+//   const handleAdminLogin =  () => {
+//     setRole("admin");
+//     setUser("admin");
+//     console.log(role);
+//   }
   const handleStudentLogin = () => {
-    setRole("Student");
-    setUser("Student");
+    setRole("students");
+    setUser("students");
     console.log(role);
   }
   const handleFacultyLogin = () => {
-    setRole("Faculty");
-    setUser("Faculty");
+    setRole("faculties");
+    setUser("faculties");
     console.log(role);
   }
 
@@ -120,33 +132,11 @@ const SignIn = () => {
               gutterBottom
               align="center"
             >
-              Sign In As:
+              Sign Up As:
             </Typography>
 
             <Grid container spacing={4}>
-            <Grid item xs={12} md={6} lg={4} >
-            <Card elevation={6} className={classes.card}>
-                  <Typography
-                    
-                    variant="h4"
-                    align="center"
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    Admin
-                  </Typography>
-                <div className={classes.center}>
-                    <FaUserShield
-                      onClick={handleAdminLogin}
-                    size="10em"
-                    color="#"
-                    className={classes.icon}
-                  />
-                  </div>
-
-            </Card>  
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={6}>
             <Card elevation={6} className={classes.card}>
             <Typography
                     variant="h4"
@@ -166,7 +156,7 @@ const SignIn = () => {
                   </div>
             </Card>  
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6} lg={6}>
             <Card elevation={6} className={classes.card}>
             <Typography
                     variant="h4"
@@ -200,7 +190,7 @@ const SignIn = () => {
           
                 {/* <button disabled={!currentUser || loading} onClick={handleLogout}> Log Out</button> */}
                 <br/>
-                <Button color="secondary" variant="contained" disabled={currentUser || loading} onClick={handleLogin}> Log In</Button>
+                <Button color="secondary" variant="contained" disabled={currentUser || loading} onClick={handleSignup}> Sign Up</Button>
               </div>
             }
             
@@ -212,7 +202,7 @@ const SignIn = () => {
       )
     }
   
-  export default SignIn
+  export default SignUp
   
 
 

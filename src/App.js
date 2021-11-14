@@ -1,13 +1,13 @@
 import { createTheme , ThemeProvider } from '@material-ui/core';
 import "bootstrap/dist/css/bootstrap.min.css"
 import { purple } from '@material-ui/core/colors';
-import {Container} from 'react-bootstrap'
 import React from 'react'
-import { BrowserRouter as Router,Switch,Route,Link } from "react-router-dom";
+import { BrowserRouter as Router,Switch,Route } from "react-router-dom";
 import About from './Pages/About';
 import Contact from './Pages/Contact';
 import Home from './Pages/Home';
 import SignIn from './Pages/SignIn';
+import SignUp from './Pages/SignUp';
 import Admin from './Pages/Admin';
 import Student from './Pages/Student';
 import Faculty from './Pages/Faculty';
@@ -16,7 +16,6 @@ import ResolveQuery from './Components/Faculty/ResolveQuery';
 import CheckResult from './Components/Student/CheckResult';
 import SubmitQuery from './Components/Student/SubmitQuery';
 import LayoutStudent from './Components/LayoutStudent';
-import AuthProvider from './Context/AuthContext';
 import AddNotice from './Components/Admin/AddNotice';
 import EditToppers from './Components/Admin/EditToppers';
 import EditFaculties from './Components/Admin/EditFaculties';
@@ -59,6 +58,9 @@ const App = () => {
           
           <Route path="/signin">
           <SignIn/>
+            </Route>
+          <Route path="/signup">
+          <SignUp/>
             </Route>
             
           <Route path="/test">

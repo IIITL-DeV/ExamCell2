@@ -1,14 +1,11 @@
-import { doc, updateDoc ,setDoc,collection } from '@firebase/firestore'
+import { doc ,setDoc} from '@firebase/firestore'
 import { TextField,Button, Typography, makeStyles } from '@material-ui/core'
 import { Paper } from '@mui/material'
 import React, { useState } from 'react'
 import { db } from '../../init-firebase'
 import LayoutAdmin from '../LayoutAdmin'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import {uploadBytesResumable,getDownloadURL,getStorage,ref as sRef } from "firebase/storage"
 import CustomSnackbar from '../Snackbar/Snackbar'
-import { styled } from '@mui/material/styles';
-import ImageIcon from '@material-ui/icons/Image';
 
 
 import { useTheme } from '@mui/material/styles';
@@ -143,13 +140,14 @@ const EditFaculties = () => {
 
     const classes = useStyles()
  
-    const facultyCollectionRef = collection(db,"faculties")
+    // const facultyCollectionRef = collection(db,"faculties")
  
     const [code, setCode] = useState("");
+    const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [subjects,setSubjects] = useState([])
     const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState(false);
+    // const [selected, setSelected] = useState(false);
 
 
     const theme = useTheme();
@@ -173,7 +171,8 @@ const EditFaculties = () => {
         await setDoc(doc(db,"faculties",code), {
             name: name,
             code: code,
-            subjects:subjects
+          subjects: subjects,
+            email:email
         } )
 
         setOpen(true);
@@ -185,7 +184,7 @@ const EditFaculties = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(code, name, subjects);
+        console.log(code, name, subjects,email);
         AddFaculty();
     }
 
@@ -226,6 +225,21 @@ const EditFaculties = () => {
                                 color="secondary"
                                 onChange={(e)=> setCode(e.target.value)}
                         />
+                        <TextField
+                            required
+                            InputLabelProps={{
+                                classes: {
+                                    root: classes.label
+                                }
+                            }}
+                                fullWidth
+                                autoComplete="off"
+                                className={classes.field}
+                                variant="outlined"
+                                label="Email"
+                                color="secondary"
+                                onChange={(e)=> setEmail(e.target.value)}
+                            />
                         <TextField
                             required
                             InputLabelProps={{

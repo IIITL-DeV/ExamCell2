@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
-import { Button, Container, Divider, Grid, makeStyles, Paper, TextField, Typography } from '@material-ui/core'
+import React, {   useState } from 'react'
+import { Button, Container, Divider, Grid,  makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import ResQuery from './ResQuery';
-import { KeyboardArrowRightRounded } from '@material-ui/icons';
+import { KeyboardArrowRightRounded, Refresh } from '@material-ui/icons';
+import { addDoc, collection,  getDocs, query, where } from '@firebase/firestore';
+import { db, useAuth } from '../../init-firebase';
 
 const useStyles = makeStyles({
     card: {
@@ -19,11 +21,8 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
-        margin: "auto 5%",
-        padding: "5px",
-        marginTop: "20px",
-        background: "#fde2f7",
-        borderRadius:"50px"
+        margin: "auto",
+        padding: "5px"
     },
     heading: {
         margin:"5px 35%",
@@ -36,48 +35,95 @@ const useStyles = makeStyles({
     }
 })
 
-const queryArr = [
 
-    {
-        id: '1',
-        title: "Example title of Query",
-        rollNo: "abc20iikl",
-        content: "I am a sample query detail  I am a sample query detail ",
-        response: "I am a sample response I am a sample response "
-        
-    },
-    {
-        id: '2',
-        title: "Example title of Query",
-        rollNo: "abc20kloo",
-        content: "I am a sample query detail  I am a sample query detail ",
-        response: "I am a sample response I am a sample response "
-    },
-    {
-        id: '3',
-        title: "Example title of Query",
-        rollNo: "abc20pill",
-        content: "I am a sample query detail  I am a sample query detail ",
-        response: "I am a sample response I am a sample response "
-        
-    }
-]
+
+
+
 
 const SubmitQuery = () => {
 
     const classes = useStyles()
-
+    const user = useAuth();
     const [title, setTitle] = useState('')
     const [details, setDetails] = useState('')
+    const [faculty, setFaculty] = useState('')
 
-    const handleSubmit = (e) => {
+    // const [clicked, setClicked] = useState(false);
+
+    const [resolvedQ,setResolvedQ]=useState([])
+    const [unresolvedQ,setUnresolvedQ]=useState([])
+
+
+
+    const handleSubmit =  async (e) => {
         
-        e.preventDefault()
-        console.log(title);
-        console.log(details);
-        console.log("submited query!")
+        e.preventDefault();
+        // console.log(title);
+        // console.log(details);
+        // console.log("submited query!")
+        
+        const toFac = faculty + "@test.com";
+
+        try {
+            await addDoc(collection(db, "queries"), {
+                title: title,
+                body: details,
+                from: user.email,
+                to: toFac,
+                isResolved: false
+            });
+            setDetails("");
+            setFaculty("");
+            setTitle("");
+            fetchResolvedQ();
+            fetchUnresolvedQ();
+        } catch(err) {
+            alert(err.message)
+        }
+
+
 
     }
+
+
+
+    const fetchResolvedQ = async () => {
+        console.log(user?.email);
+        try {
+            const queriesCollectionRef = collection(db, "queries");
+            const q = query(queriesCollectionRef, where("from", "==", user.email),where("isResolved","==",true))
+            // console.log(user.email)
+
+            const snapshot = await getDocs(q);
+            await setResolvedQ(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            // console.log(resolvedQ);
+
+        } catch {
+            alert("error!")
+        }
+    }
+
+    const fetchUnresolvedQ = async () => {
+        
+        try {
+            const queriesCollectionRef = collection(db, "queries");
+            const q = query(queriesCollectionRef, where("from", "==", user.email),where("isResolved","==",false))
+            // console.log(user.email)
+
+            const snapshot = await getDocs(q);
+            await setUnresolvedQ(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            // console.log(unresolvedQ);
+
+        } catch {
+            alert("error!")
+        }
+    }
+
+    // useEffect(() => {
+    //     fetchResolvedQ();
+    //     fetchUnresolvedQ();
+    // }, [clicked]);
+        
 
 
     return (
@@ -87,7 +133,9 @@ const SubmitQuery = () => {
                     elevation={5}
                 className={classes.heading}
                 >
-                    <Typography color="secondary" variant="h4" align="center">
+                    <Typography
+                        value={faculty}
+                        color="secondary" variant="h4" align="center">
                         Add New Query
                     </Typography>
                 </Paper>
@@ -98,14 +146,15 @@ const SubmitQuery = () => {
                 autoComplete="off"
                 onSubmit={handleSubmit}
             >
-            <TextField
+                            <TextField
+                                value={faculty}
                             InputLabelProps={{
                                 classes: {
                                     root: classes.label
                                 }
                             }}  className={classes.field}
-          onChange={(e) => setTitle(e.target.value)}
-          label="Subject Code" 
+          onChange={(e) => setFaculty(e.target.value)}
+          label="Faculty Code" 
           variant="outlined"
           color="secondary" 
           fullWidth
@@ -113,7 +162,8 @@ const SubmitQuery = () => {
         //   error={titleError}
                 />
 
-            <TextField
+                            <TextField
+                                value={title}
                             InputLabelProps={{
                                 classes: {
                                     root: classes.label
@@ -130,7 +180,8 @@ const SubmitQuery = () => {
                 
                
                 
-           <TextField
+                            <TextField
+                                value={details}
                             InputLabelProps={{
                                 classes: {
                                     root: classes.label
@@ -147,7 +198,7 @@ const SubmitQuery = () => {
         //   error={detailsError}
                 />
                 
-                <Button
+            <Button
           type="submit" 
           color="secondary" 
           variant="contained"
@@ -160,45 +211,78 @@ const SubmitQuery = () => {
             </div>
             </div>
 
+            <div>
             <Divider className={classes.field} />
 
+            
             <Typography
             
                 variant="h5"
             color="textSecondary"
             component="h2"
-            gutterBottom
-        >
+                    gutterBottom
+                    align="center"
+            >
         Resolved Queries.
-        </Typography>
+                </Typography>
+            <div className={classes.center}>
+                <Refresh
+                    
+                    fontSize="large"
+                    color="secondary"
+                    onClick={fetchResolvedQ}
+                    style={{
+                        width:"100px",
+                        margin: "10px auto",
+                        border: "1px solid #d500f9",
+                        backgroundColor:"pink"
+                    }}
+                /></div>
 
+            <br />
+                
         <Grid container spacing={3}>
                     
-                    {queryArr.map(quer => (
+                    {resolvedQ.map(quer => (
                         <Grid item xs={12} sm={6} md={4} lg={4} key={quer.id}>
                             <ResQuery resolved={true} quer={quer}/>
                         </Grid>
 
                     ))}
                     
-                </Grid>
+        </Grid>
 
-            
+        </div>
+
             <Divider className={classes.field} />
+
 
             <Typography
             
             variant="h5"
             color="textSecondary"
             component="h2"
-            gutterBottom
+                gutterBottom
+                align="center"
         >
         Unresolved Queries.
-        </Typography>
-
+            </Typography>
+            <div className={classes.center}>
+            <Refresh
+                    
+                    fontSize="large"
+                    color="secondary"
+                    onClick={fetchUnresolvedQ}
+                style={{
+                        width: "100px",
+                        margin: "10px auto",
+                        border: "1px solid #d500f9",
+                        backgroundColor:"pink"
+                    }}
+                /></div>
         <Grid container spacing={3}>
                     
-                    {queryArr.map(quer => (
+                    {unresolvedQ.map(quer => (
                         <Grid item xs={12} sm={6} md={4} lg={4} key={quer.id}>
                             <ResQuery resolved={false} quer={quer}/>
                         </Grid>

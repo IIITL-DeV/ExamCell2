@@ -8,7 +8,8 @@ const useStyles = makeStyles({
         maxWidth: "100%"
     },
     img: {
-        maxWidth: "70%",
+        width: "200px",
+        height:"200px",
         margin: "10px auto",
     },
     head: {

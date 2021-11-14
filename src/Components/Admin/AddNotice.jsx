@@ -1,5 +1,5 @@
 import { addDoc, collection } from '@firebase/firestore'
-import { Button, InputLabel, makeStyles, Paper, TextField, Typography } from '@material-ui/core'
+import { Button, makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
 import { db } from '../../init-firebase'
 import LayoutAdmin from '../LayoutAdmin'
@@ -45,7 +45,7 @@ const useStyles = makeStyles({
 const AddNotice = () => {
 
     const classes = useStyles()
-    const [newBody, setNewBody] = useState()
+    const [newBody, setNewBody] = useState("")
     const noticeCollectionRef = collection(db, "notices")
     const [open, setOpen] = useState(false);
 
@@ -57,6 +57,8 @@ const AddNotice = () => {
         await addDoc(noticeCollectionRef, { body: newBody, new: true })
         
         setOpen(true);
+
+        setNewBody("");
         
 
     }
@@ -83,7 +85,8 @@ const AddNotice = () => {
                 onSubmit={submitNotice}
                     >
                         
-                        <TextField
+                            <TextField
+                                value={newBody}
                             InputLabelProps={{
                                 classes: {
                                     root: classes.label

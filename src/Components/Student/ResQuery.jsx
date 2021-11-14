@@ -1,6 +1,7 @@
-import { Button, Card, CardContent, CardHeader, Divider, IconButton, makeStyles, TextField, Typography } from '@material-ui/core'
+import { deleteDoc, doc } from '@firebase/firestore'
+import {   Card, CardContent, CardHeader, Divider, IconButton, makeStyles,  Typography } from '@material-ui/core'
 import { DeleteOutlined } from '@material-ui/icons'
-import React, { useState } from 'react'
+import { db } from '../../init-firebase'
 
 const useStyles = makeStyles({
     field: {
@@ -14,33 +15,44 @@ const ResQuery = (props) => {
     
     const classes = useStyles();
 
-    const [response, setResponse] = useState('');
-    const [resolved, setResolved] = useState(false);
+    // const [response, setResponse] = useState('');
+    // const [resolved, setResolved] = useState(false);
 
-    const handleRes = () => {
-        setResolved(true)
+    // const handleRes = () => {
+    //     setResolved(true)
+    // }
+
+    const handleDelete = async (id) => {
+        try {
+            const docRef = doc(db, "queries", id);
+            await deleteDoc(docRef);
+            console.log("delted", id);
+        } catch(err) {
+            alert(err.message)
+        }
     }
-
 
     return (
         <Card>
             <CardHeader
                 action={
-          <IconButton aria-label="settings" color="secondary" >
-            <DeleteOutlined fontSize="large"/>
+          <IconButton onClick={()=> handleDelete(props.quer.id)} aria-label="settings" color="secondary" >
+            <DeleteOutlined  fontSize="large"/>
           </IconButton>
         }
                 title={props.quer.title}
-                subheader={props.quer.rollNo}
+                subheader={`
+                to: ${props.quer.to}
+                `}
             />
             <CardContent>
                 <Typography variant="h6">
-                {props.quer.content}
+                {props.quer.body}
                     </Typography>
                 <Divider className={classes.field}/>
                 <Typography variant="h5">
                     
-                    {props.resolved? props.quer.response : null}
+                    {props.quer.isResolved ? props.quer.response : null}
                </Typography>
                     
 

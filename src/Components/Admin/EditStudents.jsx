@@ -4,12 +4,11 @@ import { Paper } from '@mui/material'
 import React, { useState } from 'react'
 import { db } from '../../init-firebase'
 import LayoutAdmin from '../LayoutAdmin'
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import {uploadBytesResumable,getDownloadURL,getStorage,ref as sRef } from "firebase/storage"
 import CustomSnackbar from '../Snackbar/Snackbar'
 import { styled } from '@mui/material/styles';
 import ImageIcon from '@material-ui/icons/Image';
-import {collection,deleteDoc,getDocs,addDoc,updateDoc,setDoc,doc} from 'firebase/firestore'
+import {deleteDoc,setDoc,doc} from 'firebase/firestore'
 import { Delete, AddCircleOutline } from '@material-ui/icons'
 
 
@@ -72,7 +71,6 @@ const EditStudents = () => {
  
     var files = [];
 
-  const studentCollectionRef = collection(db,"students")
  
     const [deleteRoll, setDeleteRoll] = useState(0);
 
@@ -91,6 +89,7 @@ const EditStudents = () => {
     const createStudent = async () => {
         
         await setDoc(doc(db, "students", rollnum), {
+            
             address: address,
             batch: batch,
             email: email,
@@ -98,11 +97,11 @@ const EditStudents = () => {
             dob: dob,
             phone: phone,
             photo: photo,
-            rollnum: rollnum
+            rollnum: rollnum,
+            
                  
         });
 
-       
         
         setOpen(true);
 
@@ -143,7 +142,7 @@ const EditStudents = () => {
         const UploadTask = uploadBytesResumable(storageRef, ImageToUpload, metaData);
 
         UploadTask.on('state_changed', (snapshot) => {
-            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
              
 

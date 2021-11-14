@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Avatar, Button, Container, Divider, Grid, List, ListItem, makeStyles, Paper, Typography } from '@material-ui/core'
+import {  Button, Container,  Grid,  makeStyles, Paper, Typography } from '@material-ui/core'
 import ResultForm from '../Student/ResultForm'
-import { ClassNames } from '@emotion/react'
-import { NewReleasesOutlined, NewReleasesTwoTone } from '@material-ui/icons'
+import { NewReleasesTwoTone } from '@material-ui/icons'
 
 const semList = [
 
@@ -101,7 +100,7 @@ const CheckResult = () => {
                 <div className={classes.center}>                        
                     <Grid container spacing={2}>
                  {semList.map(s => {
-                    return s.id!='7' ?
+                    return s.id!=='7' ?
                        <Grid item  sm={12} md={6} lg={6}><Button variant="outlined" color="secondary" onClick={displayForm}>View Result for Semester {s.sem}
                         </Button></Grid>
                         :

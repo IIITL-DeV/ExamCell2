@@ -114,7 +114,7 @@ const EditToppers = () => {
         const UploadTask = uploadBytesResumable(storageRef, ImageToUpload, metaData);
 
         UploadTask.on('state_changed', (snapshot) => {
-            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
              
 

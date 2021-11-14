@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 
 import {db} from '../init-firebase'
-import {setDoc,collection,onSnapshot,getDoc,doc,updateDoc} from 'firebase/firestore' 
+import {getDoc,doc,updateDoc} from 'firebase/firestore' 
 import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles({
@@ -38,7 +38,7 @@ const Test = () => {
 
     const semRef1 = useRef();
     const rollRef1 = useRef();
-    const subjectRef1 = useRef();
+    // const subjectRef1 = useRef();
     const semRef2 = useRef();
     const rollRef2 = useRef();
     const subjectRef2 = useRef();
@@ -55,8 +55,8 @@ const Test = () => {
         console.log(rollRef1.current.value)
         //============================//
 
-        const rollPath = "students/" + rollRef1.current.value + "/marks";
-        const semester = "sem" + semRef1.current.value;
+        // const rollPath = "students/" + rollRef1.current.value + "/marks";
+        // const semester = "sem" + semRef1.current.value;
 
         const tempRollPath = "students/" + rollRef1.current.value;
 
@@ -82,7 +82,7 @@ const Test = () => {
         //=============================//
         const rollPath = "students/" + rollRef2.current.value + "/marks";
         const semester = "sem" + semRef2.current.value;
-        const subject = subjectRef2.current.value;
+        // const subject = subjectRef2.current.value;
         const docRef = doc(db, rollPath, semester);
         try {
             await updateDoc(

@@ -1,6 +1,8 @@
-import { Button, Card, CardContent, CardHeader, Checkbox, IconButton, makeStyles, TextField, Typography } from '@material-ui/core'
+import { Button, Card, CardContent, CardHeader,  IconButton, makeStyles, TextField, Typography } from '@material-ui/core'
 import {  DeleteOutlined } from '@material-ui/icons';
 import React, { useState } from 'react'
+import { doc, updateDoc,deleteDoc } from '@firebase/firestore'
+import { db } from '../../init-firebase';
 
 const useStyles = makeStyles({
     field: {
@@ -10,15 +12,37 @@ const useStyles = makeStyles({
     }
 })
 
-const Query = ({ quer }) => {
+const Query = (props) => {
     
     const classes = useStyles();
 
     const [response, setResponse] = useState('');
-    const [resolved, setResolved] = useState(false);
+    // const [resolved, setResolved] = useState(false);
 
-    const handleRes = () => {
-        setResolved(true)
+    const handleRes = async (id) => {
+        // setResolved(true);
+        console.log(id);
+        const docRef = doc(db, "queries", id);
+        try {
+            await updateDoc(docRef, {
+                "isResolved": true,
+                "response": response
+            },
+            {merge:true}
+            )
+        } catch (err) {
+            console.log(err.message)
+        }
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            const docRef = doc(db, "queries", id);
+            await deleteDoc(docRef);
+            console.log("delted", id);
+        } catch(err) {
+            alert(err.message)
+        }
     }
 
     return (
@@ -27,15 +51,15 @@ const Query = ({ quer }) => {
             <CardHeader
                 action={
           <IconButton aria-label="settings" color="secondary" >
-            <DeleteOutlined fontSize="large"/>
+            <DeleteOutlined onClick={()=> handleDelete(props.quer.id)} fontSize="large"/>
           </IconButton>
         }
-                title={quer.title}
-                subheader={quer.rollNo}
+                title={props.quer.title}
+                    subheader={`from : ${props.quer.from}`}
             />
             <CardContent>
                 <Typography variant="body1">
-                {quer.content}
+                {props.quer.body}
                     </Typography>
                     
          <TextField className={classes.field}
@@ -43,7 +67,7 @@ const Query = ({ quer }) => {
           label="Response" 
           variant="outlined" 
           color="secondary"
-                        multiline
+          multiline
           rows={4}
           fullWidth
           required
@@ -53,7 +77,7 @@ const Query = ({ quer }) => {
           type="submit" 
           color="secondary" 
                         variant="contained"
-                        onClick={handleRes}
+                        onClick={() => { handleRes(props.quer.id) }}
           >
           Reply
         </Button>  
