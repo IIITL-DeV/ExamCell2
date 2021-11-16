@@ -72,7 +72,7 @@ export default function LayoutAdmin({ children }) {
           path:'/edit-toppers'
     },
       {
-          text: 'Check Any Result',
+          text: 'Publish Result',
           icon: <AssignmentIndOutlined color="secondary" fontSize="large" />,
           path:'/checkResultAdmin'
     },

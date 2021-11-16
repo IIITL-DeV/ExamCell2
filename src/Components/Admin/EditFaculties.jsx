@@ -29,53 +29,11 @@ const MenuProps = {
 };
 
 const names = [
-    "DMS431C (T)",
-
-    "OSY431C (T)",
-    
-    
-    "CNE431C (T)",
-    
-    
-    "DAA431C (T)",
-    
-    
-    "ACA431C (T)",
-    
-    
-    "DMS431C (L)",
-    
-    
-    "OSY431C (L)",
-    
-    
-    "CNE431C (L)",
-    
-    
-    "DAA431C (L)",
-    
-    
-    "ACA431C (L)",
-    
-    
-    "SPO401C (L)",
-    
-    "APL331C (T)",
-    
-    
-    "COR340C (T)",
-    
-    
-    "DMA340C (T)",
-    
-    
-    "CAL340C (T)",
-    
-    
-    "TOC340C (T)",
-    
-    
-    "APL331C (L)"
+    "Maths",
+    "English",
+    "Physics",
+    "Chemistry",
+    "Biology"
 ];
 
 function getStyles(name, subjects, theme) {

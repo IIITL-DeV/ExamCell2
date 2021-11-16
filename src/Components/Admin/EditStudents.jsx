@@ -97,12 +97,23 @@ const EditStudents = () => {
             dob: dob,
             phone: phone,
             photo: photo,
-            rollnum: rollnum,
-            
-                 
+            rollnum: rollnum
         });
 
-        
+        for (let i = 1; i <= 8; i++) {
+            const rollPath = "students/" + rollnum + "/marks";
+            const semesterNum = "sem" + i;
+            const docRef = doc(db, rollPath, semesterNum);
+
+            try {
+                await setDoc(docRef, {
+                
+                })
+            } catch (err) {
+                alert(err.message)
+            }
+
+        }
         setOpen(true);
 
     }
@@ -278,7 +289,7 @@ const EditStudents = () => {
                                 autoComplete="off"
                                 className={classes.field}
                                 variant="outlined"
-                                label="Personal Email"
+                                label="Email"
                                 color="secondary"
                                 onChange={(e)=> setEmail(e.target.value)}
                         />

@@ -22,7 +22,8 @@ const CustomSnackbar = ({open,setOpen,message}) => {
                 autoHideDuration={3000}
                 onClose={handleClose}
             >
-                <Alert onClose={handleClose} severity="success" elevation={6} variant="filled">{message}</Alert>
+                <Alert onClose={handleClose} severity="success" style={{backgroundColor:"#a8ff8f"}} elevation={7}  variant="filled">{message}</Alert>
+                {/* <Alert severity="success">This is a success aler/t — check it out!</Alert> */}
             </Snackbar>
         </div>
     )

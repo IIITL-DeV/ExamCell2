@@ -1,9 +1,11 @@
-import { doc, updateDoc } from '@firebase/firestore'
+import { doc, updateDoc,getDocs, setDoc,collection,query,where } from '@firebase/firestore'
 import { Button, FormControl, InputLabel, makeStyles, MenuItem, Paper, Select, TextField, Typography } from '@material-ui/core'
 import { CheckCircleRounded  } from '@material-ui/icons'
-import React, { useState } from 'react'
-import { db } from '../../init-firebase'
+import React, { useEffect, useState } from 'react'
+import { db, useAuth } from '../../init-firebase'
+// import {useAuth} from '../../Context/AuthContext'
 import LayoutFaculty from '../LayoutFaculty'
+import CustomSnackbar from '../Snackbar/Snackbar'
 
 
 const sem = [
@@ -89,54 +91,116 @@ formArea: {
 
 const AddMarks = () => {
 
+    const currentUser = useAuth();
     const [semester, setSemester] = React.useState('1');
 
     const [roll, setRoll] = useState('');
 
     const [subject, setSubject] = useState('')
+    const [subjectArr, setSubjectArr] = useState('')
     
     const [obtained, setObtained] = useState('')
     
-    const [total,setTotal]=useState('')
+    const [total, setTotal] = useState('')
+    const [open, setOpen] = useState(false);
+
+    
+    const [loadForm,setLoadForm ] = useState(false);
 
    
     const handleSemester = (event) => {
       setSemester(event.target.value);
     };
 
+    const handleSubject = (event) => {
+      setSubject(event.target.value);
+    };
+
+    const fetchSubjectArr = async () => {
+        console.log(currentUser);
+        try {
+            const facCollectionRef = collection(db, "faculties");
+            const q = query(facCollectionRef, where("email", "==", currentUser.email));
+            const snapshot = await getDocs(q);
+            
+            console.log(snapshot);
+            setSubjectArr(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            // console.log(subjectArr);
+            setLoadForm(true);
+
+        } catch (err) {
+            alert(err.message);
+        }
+        
+    }
+
+    const [subjectsList,setSubjectsList]=useState();
+
+    useEffect(() => {
+        console.log(subjectArr)
+        if(subjectArr)
+            setSubjectsList(subjectArr[0].subjects);
+    },[subjectArr])
+
+    
+
+   
+  
+    
+
+
+       
+
     const classes = useStyles();
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log("push req made!");
-        console.log(roll);
-        console.log(subject);
-        console.log(semester);
+        // console.log("push req made!");
+        // console.log(roll);
+        // console.log(subject);
+        // console.log(semester);
+
+
 
 
         const rollPath = "students/" + roll + "/marks";
         const semesterNum = "sem" + semester;
         const docRef = doc(db, rollPath, semesterNum);
+
+        
+
         try {
             await updateDoc(
                 docRef,
                 {
-                    [subject]: obtained
+                    [subject]: { obtained, total }
                  } ,
                 { merge: true }
             )
-            console.log("success!")
-        } catch {
-            alert("Error Occured!")
-        }
-
-
-    
+            // setRoll('1');
+            // setSubject('');
+            // setRoll('');
+            // setObtained('');
+            // setTotal('');
+            setOpen(true);
+            // console.log("success!")
+        } catch(err) {
+            alert(err.message)
+        }    
       }
 
+    
+    
 
     return (
-      <LayoutFaculty>
+        < LayoutFaculty >
+        <CustomSnackbar open={open} setOpen={setOpen} message={"Marks Added Succesfully !"} />
+            {!loadForm && <div className={classes.center}>
+            <Button variant="outlined" color="secondary" onClick={fetchSubjectArr}>Load Form</Button>
+            </div>}
+
+            {loadForm &&
+      
         <div className={classes.formArea}>
         <Paper className={classes.heading}>
             <Typography align="center" variant="h4" gutterBottom>AddMarks</Typography>
@@ -150,12 +214,12 @@ const AddMarks = () => {
                 <InputLabel
                   style={{color:"#d500f9"}} id="demo-simple-select-label">Semester</InputLabel>
                 <Select
-                  variant="outlined"
+                  
                   // className={classes.field}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={semester}
-          label="Se"
+          label="Semester"
           onChange={handleSemester}
                 >
                     {sem.map(s => (
@@ -166,20 +230,29 @@ const AddMarks = () => {
 
         </Select>
             </FormControl>
-            
-      <TextField InputLabelProps={{
-                                classes: {
-                                    root: classes.label
-                                }
-                            }} className={classes.field}
-          onChange={(e) => setSubject(e.target.value)}
-          label="Subject " 
-          variant="outlined" 
-          color="secondary" 
-          fullWidth
-          required
-        //   error={titleError}
-            />
+
+
+<FormControl className={classes.field} fullWidth>                        
+<InputLabel  style={{color:"#d500f9"}}  id="demo-simple-select-label">Subject</InputLabel>
+                            <Select
+                                
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={subject}
+    label="Age"
+    onChange={handleSubject}
+                            >
+          {subjectsList.map(s => (
+    
+    <MenuItem key={s} value={s}>{s}</MenuItem>
+))}
+                  
+                                
+        </Select>      
+</FormControl>                  
+                        
+                        
+        
 
         <TextField InputLabelProps={{
                                 classes: {
@@ -189,13 +262,15 @@ const AddMarks = () => {
           onChange={(e) => setRoll(e.target.value)}
           label="Enrollment No." 
           variant="outlined" 
-          color="secondary" 
+                            color="secondary"
+                            value={roll}
           fullWidth
           required
         //   error={titleError}
         />    
 
-      <TextField InputLabelProps={{
+                        <TextField InputLabelProps={{
+          
                                 classes: {
                                     root: classes.label
                                 }
@@ -203,7 +278,8 @@ const AddMarks = () => {
           onChange={(e) => setObtained(e.target.value)}
           label="Obtained Marks" 
           variant="outlined" 
-          color="secondary" 
+                            color="secondary"
+                            value={obtained} 
           fullWidth
           required
         //   error={titleError}
@@ -235,7 +311,8 @@ const AddMarks = () => {
       </form>
       </Paper>
       </div>
-        </LayoutFaculty>
+                        }
+        </LayoutFaculty >
     )
 }
 

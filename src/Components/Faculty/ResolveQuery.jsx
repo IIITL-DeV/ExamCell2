@@ -68,7 +68,7 @@ const ResolveQuery = () => {
 
             const snapshot = await getDocs(q);
             console.log(snapshot);
-            await setQueriesArr(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            setQueriesArr(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
             console.log(queriesArr);
 
         } catch(err) {

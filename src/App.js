@@ -24,6 +24,8 @@ import EditStudents from './Components/Admin/EditStudents';
 import LayoutAdmin from './Components/LayoutAdmin';
 import Layout from './Components/Layout';
 import Test from './Pages/Test';
+import AuthContextProvider from './Context/AuthContext';
+import ResultCheck from './Components/Student/ResultCheck';
 
 const theme = createTheme({
   palette: {
@@ -45,6 +47,7 @@ const App = () => {
   return (
     
     <ThemeProvider theme={theme}>
+<AuthContextProvider>
       <Router>
         <Layout>
           <Switch>
@@ -111,7 +114,8 @@ const App = () => {
 
           <Route path="/checkResult">
           <LayoutStudent>
-          <CheckResult/>
+                  {/* <CheckResult/> */}
+                  <ResultCheck/>
           </LayoutStudent>
           </Route>
 
@@ -128,6 +132,7 @@ const App = () => {
     </Switch>
     </Layout>
       </Router>
+    </AuthContextProvider>
       </ThemeProvider>
       
   )

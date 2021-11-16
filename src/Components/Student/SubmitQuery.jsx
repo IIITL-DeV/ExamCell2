@@ -245,7 +245,8 @@ const SubmitQuery = () => {
                     
                     {resolvedQ.map(quer => (
                         <Grid item xs={12} sm={6} md={4} lg={4} key={quer.id}>
-                            <ResQuery resolved={true} quer={quer}/>
+                            <ResQuery resolved={true} quer={quer} />
+                            
                         </Grid>
 
                     ))}

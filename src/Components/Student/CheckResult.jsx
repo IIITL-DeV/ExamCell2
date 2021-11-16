@@ -74,6 +74,8 @@ const CheckResult = () => {
 
     const classes = useStyles();
 
+    const data = {};
+
     const [showForm, setShowForm] = useState(false)
 
     const displayForm = (e) => {
@@ -121,7 +123,7 @@ const CheckResult = () => {
                 
             </Grid>
                     <Grid item lg={12}>
-                        {showForm && <ResultForm />}
+                        {showForm && <ResultForm data={data} />}
                     </Grid> 
             </Grid>
             </div>

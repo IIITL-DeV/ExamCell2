@@ -4,9 +4,10 @@ import { useHistory } from 'react-router'
 // import { styled } from '@mui/material/styles';
 // import { Paper } from '@mui/material';
 import { Box } from '@mui/material'
-import { logout ,useAuth} from '../init-firebase';
+import { logout } from '../init-firebase';
 import { UserContext } from '../Context/UserContext';
-
+// import { useAuth } from '../Context/AuthContext';
+import { useAuth } from '../init-firebase';
 // const Item = styled(Paper)(({ theme }) => ({
 //   ...theme.typography.body2,
 //   padding: theme.spacing(1),
@@ -51,25 +52,38 @@ const Layout =  ({children}) => {
 
   const handleSection = () => {
 
-    const email = currentUser.email;
-    const user = email[0];
-    // console.log(currentUser.email[0]);
+    if (!currentUser) {
+      alert("Not Logged In!");
+      return;
+    }
 
-    switch (user) {
-      case "a":
-        history.push('/admin')
-        break;
+    try {
+      console.log(currentUser);
+
+
+      const email = currentUser.email;
+      const user = email[0];
+      // console.log(currentUser.email[0]);
+
+      switch (user) {
+        case "a":
+          history.push('/admin')
+          break;
         
-      case "s":
-        history.push('/student')
-        break;
+        case "s":
+          history.push('/student')
+          break;
         
-      case "f":
-        history.push('/faculty')
-        break;
+        case "f":
+          history.push('/faculty')
+          break;
         
-      default:
-        break;
+        default:
+          break;
+      }
+      
+    } catch (err) {
+      console.log(err.message);
     }
   }
 
@@ -93,7 +107,8 @@ const Layout =  ({children}) => {
                         <div style={{ flexGrow: 1 }}></div>
               {currentUser &&
                 <Button onClick={()=>handleSection()} >My Section</Button>}
-                        {!currentUser && <Button onClick={() => history.push('/signin')}>Login</Button>}
+                        {!currentUser && <Button onClick={() => history.push('/signin')}>Sign In</Button>}
+                        {!currentUser && <Button onClick={() => history.push('/signup')}>Sign Up</Button>}
                         {currentUser && <Button onClick={handleLogout} >Logout</Button>}
         </Toolbar>
       </AppBar>

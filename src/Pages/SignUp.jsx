@@ -1,7 +1,7 @@
 import { Card, Grid, makeStyles, Paper, Typography ,Button } from '@material-ui/core';
 import React, { useContext, useRef ,useState } from 'react'
 import { useHistory } from 'react-router';
-import {useAuth, db} from '../init-firebase'
+import {useAuth, db, signup} from '../init-firebase'
 import {BsFilePerson} from "react-icons/bs"
 import { FaChalkboardTeacher  } from "react-icons/fa"
 
@@ -69,7 +69,7 @@ const SignUp = () => {
           if (snapshot.empty) {
               alert("User Not Allowed!")
           } else {
-            //   const cred = await signup(emailRef.current.value, passwordRef.current.value);
+              const cred = await signup(emailRef.current.value, passwordRef.current.value);
               history.push('/');
           }
       } catch(err) {
@@ -184,7 +184,9 @@ const SignUp = () => {
                 <div style={{ margin: "20px", padding: "10px" }}><h2> Enter {role} credentials </h2></div>
                 <input style={{ margin: "20px", padding: "10px" }} ref={emailRef} placeholder="Email" />
                 <br/>
-                <input style={{ margin: "20px", padding: "10px" }} ref={passwordRef} type="password" placeholder="Password" />
+              <input style={{ margin: "20px", padding: "10px" }} ref={passwordRef} type="password" placeholder="Password" />
+                <br/>
+                <input style={{ margin: "20px", padding: "10px" }} type="password" placeholder="Confirm Password" />
                 {/* <button disabled={loading || currentUser} onClick={handleSignup}> Sign Up</button>
            */}
           

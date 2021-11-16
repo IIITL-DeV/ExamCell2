@@ -49,11 +49,11 @@ const Query = (props) => {
         <div>
         <Card>
             <CardHeader
-                action={
-          <IconButton aria-label="settings" color="secondary" >
-            <DeleteOutlined onClick={()=> handleDelete(props.quer.id)} fontSize="large"/>
-          </IconButton>
-        }
+        //         action={
+        //   <IconButton aria-label="settings" color="secondary" >
+        //     <DeleteOutlined onClick={()=> handleDelete(props.quer.id)} fontSize="large"/>
+        //   </IconButton>
+        // }
                 title={props.quer.title}
                     subheader={`from : ${props.quer.from}`}
             />
