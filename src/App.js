@@ -19,7 +19,7 @@ import LayoutStudent from './Components/LayoutStudent';
 import AddNotice from './Components/Admin/AddNotice';
 import EditToppers from './Components/Admin/EditToppers';
 import EditFaculties from './Components/Admin/EditFaculties';
-import CheckResultAdmin from './Components/Admin/CheckResultAdmin';
+import PublishResult from './Components/Admin/PublishResult';
 import EditStudents from './Components/Admin/EditStudents';
 import LayoutAdmin from './Components/LayoutAdmin';
 import Layout from './Components/Layout';
@@ -47,7 +47,7 @@ const App = () => {
   return (
     
     <ThemeProvider theme={theme}>
-<AuthContextProvider>
+      <AuthContextProvider>
       <Router>
         <Layout>
           <Switch>
@@ -98,9 +98,9 @@ const App = () => {
           <EditToppers/>
           </Route>
 
-          <Route path="/checkResultAdmin">
+          <Route path="/publish-result">
             <LayoutAdmin>
-          <CheckResultAdmin/>
+          <PublishResult/>
           </LayoutAdmin>
           </Route>
 

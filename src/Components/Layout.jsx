@@ -67,15 +67,15 @@ const Layout =  ({children}) => {
 
       switch (user) {
         case "a":
-          history.push('/admin')
+          history.push('/add-notice')
           break;
         
         case "s":
-          history.push('/student')
+          history.push('/checkResult')
           break;
         
         case "f":
-          history.push('/faculty')
+          history.push('/add-marks')
           break;
         
         default:

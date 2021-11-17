@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     }
 })
 
-const Query = (props) => {
+const Query = ({funCall,quer}) => {
     
     const classes = useStyles();
 
@@ -30,36 +30,23 @@ const Query = (props) => {
             },
             {merge:true}
             )
+            funCall();
         } catch (err) {
             console.log(err.message)
         }
     }
 
-    const handleDelete = async (id) => {
-        try {
-            const docRef = doc(db, "queries", id);
-            await deleteDoc(docRef);
-            console.log("delted", id);
-        } catch(err) {
-            alert(err.message)
-        }
-    }
 
     return (
         <div>
         <Card>
             <CardHeader
-        //         action={
-        //   <IconButton aria-label="settings" color="secondary" >
-        //     <DeleteOutlined onClick={()=> handleDelete(props.quer.id)} fontSize="large"/>
-        //   </IconButton>
-        // }
-                title={props.quer.title}
-                    subheader={`from : ${props.quer.from}`}
+                title={quer.title}
+                    subheader={`from : ${quer.from}`}
             />
             <CardContent>
                 <Typography variant="body1">
-                {props.quer.body}
+                {quer.body}
                     </Typography>
                     
          <TextField className={classes.field}
@@ -77,7 +64,7 @@ const Query = (props) => {
           type="submit" 
           color="secondary" 
                         variant="contained"
-                        onClick={() => { handleRes(props.quer.id) }}
+                        onClick={() => { handleRes(quer.id) }}
           >
           Reply
         </Button>  

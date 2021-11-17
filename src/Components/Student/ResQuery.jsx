@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     }
 })
 
-const ResQuery = (props) => {
+const ResQuery = ({funCall,quer,resolved}) => {
     
     const classes = useStyles();
 
@@ -24,9 +24,10 @@ const ResQuery = (props) => {
 
     const handleDelete = async (id) => {
         try {
-            const docRef = doc(db, "queries", id);
-            await deleteDoc(docRef);
-            console.log("delted", id);
+            // const docRef = doc(db, "queries", id);
+            // await deleteDoc(docRef);
+            // console.log("delted", id);
+            funCall();
         } catch(err) {
             alert(err.message)
         }
@@ -36,23 +37,23 @@ const ResQuery = (props) => {
         <Card>
             <CardHeader
                 action={
-          <IconButton onClick={()=> handleDelete(props.quer.id)} aria-label="settings" color="secondary" >
+          <IconButton onClick={()=> handleDelete(quer.id)} aria-label="settings" color="secondary" >
             <DeleteOutlined  fontSize="large"/>
           </IconButton>
         }
-                title={props.quer.title}
+                title={quer.title}
                 subheader={`
-                to: ${props.quer.to}
+                to: ${quer.to}
                 `}
             />
             <CardContent>
                 <Typography variant="h6">
-                {props.quer.body}
+                {quer.body}
                     </Typography>
                 <Divider className={classes.field}/>
                 <Typography variant="h5">
                     
-                    {props.quer.isResolved ? props.quer.response : null}
+                    {quer.isResolved ? quer.response : null}
                </Typography>
                     
 

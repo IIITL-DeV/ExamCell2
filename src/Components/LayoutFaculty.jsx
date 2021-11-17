@@ -79,6 +79,7 @@ export default function LayoutFaculty({ children }) {
         variant="permanent"
         classes={{ paper: classes.drawerPaper }}
         anchor="left"
+        style={{height:"100vh"}}
       >
         
 

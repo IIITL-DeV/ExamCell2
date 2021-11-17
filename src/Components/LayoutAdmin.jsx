@@ -74,7 +74,7 @@ export default function LayoutAdmin({ children }) {
       {
           text: 'Publish Result',
           icon: <AssignmentIndOutlined color="secondary" fontSize="large" />,
-          path:'/checkResultAdmin'
+          path:'/publish-result'
     },
       {
           text: 'Edit Students',
@@ -98,6 +98,7 @@ export default function LayoutAdmin({ children }) {
         variant="permanent"
         classes={{ paper: classes.drawerPaper }}
         anchor="left"
+        style={{height:"100vh"}}
       >
 
         {/* links/list section */}

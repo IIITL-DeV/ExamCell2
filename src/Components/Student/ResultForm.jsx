@@ -3,22 +3,10 @@ import { useReactToPrint } from 'react-to-print';
 import React, { useEffect, useRef, useState } from 'react'
 // import avatarResult from '../Assets/avtarResult.jpg'
 import DownloadingIcon from '@mui/icons-material/Downloading';
-import { useAuth } from '../../init-firebase';
+import { db, useAuth } from '../../init-firebase';
+import { doc, getDoc  } from '@firebase/firestore'
 
-function createData(name, obtained, max, grade) {
-    return { name, obtained, max, grade};
-  }
-
-let rows = [
-    createData('EDA123', 91, 100, "A+"),
-    createData('ABC999', 90, 100, "A"),
-    createData('DAA192', 62, 100, "C"),
-    createData('SE230', 85, 100, "A"),
-    createData('CRP123', 70, 100, "B" ),
-  ];
- 
-
-  const useStyles = makeStyles({
+const useStyles = makeStyles({
     root: {
         marginTop: 40,
         marginBottom: 20,
@@ -31,8 +19,8 @@ let rows = [
       padding: "30px"
     },
     img: {
-      width: "100%",
-      maxWidth: "200px",
+      width: "100px",
+      height: "100px",
       display: "flex",
       justifyContent:"centre"
     },
@@ -53,8 +41,9 @@ let rows = [
       display:"flex",
       justifyContent:"center",
       widht: "50%",
-      border: "2px solid black",
-      borderRadius:"15px"
+      border: "3px solid pink",
+      borderRadius: "15px",
+      backgroundColor:"#fde2f7"
     },
     divs: {
       // display: "inline-block",
@@ -65,38 +54,86 @@ let rows = [
   })
 
 
-const ResultForm = ({sem,marksArr,funcCall}) => {
+const ResultForm = ({sem,marksArr,funcCall,funcCall2}) => {
 
   const currentUser = useAuth();
   const classes = useStyles()
   const componentRef = useRef()
+
+  const [name, setName] = useState("");
+  const [rollNo, setRollNo] = useState("");
+  const [batch, setBatch] = useState("");
+  const [photoSrc, setPhotoSrc] = useState("");
+
   // let [marksArr,setMarksArr]=useState([])
   const handlePrint = useReactToPrint({
     content: () => componentRef.current
   });
 
   const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(true);
 
-  const showMarks = () => {
+  const showMarks = async () => {
     setShow(!show);
+    setShow2(!show2);
     funcCall();
-
-    // const docRef = doc(db)
-
+    const email = currentUser.email;
+    const roll = email.slice(0, 8);
+    console.log(roll);
+    const docRef = doc(db, "students", roll);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data())
+    setName(docSnap.data().name);
+    setBatch(docSnap.data().batch);
+    setRollNo(docSnap.data().rollnum);
+    setPhotoSrc(docSnap.data().photo);
     console.log(marksArr);
   }
 
+  const checkOther = () => {
+    setShow(false);
+    setShow2(false);
+    funcCall2();
+  }
+  
   useEffect(() => {
-    console.log("EMAIL:",currentUser?.email);
+    console.log("EMAIL: ",currentUser?.email);
+    // console.log("PHOTO:",photoSrc);
     console.log(marksArr);
-  },[show])
+  },[])
 
+  const getGrades=(marks)=>{
+    if (marks > 95) {
+      return "A+";
+    }
+    if (marks > 90) {
+      return "A";
+    }
+    if (marks > 80) {
+      return "B+";
+    }
+    if (marks > 75) {
+      return "B";
+    }
+    if (marks > 70) {
+      return "C";
+    }
+    if (marks <= 70) {
+      return "D"
+    }
+    
+  }
 
 
     return (
 <>
-        <Button onClick={showMarks}>Show Result for {sem}</Button>
-{show && <Container className={classes.root}>
+        {show2 && <div style={{ marginTop: "20px" }} className={classes.center}><Button variant="outlined" color="secondary" onClick={showMarks}>Show Result for {sem}</Button></div>}
+        {show && <div style={{ marginTop: "20px" }} className={classes.center}>
+          <Button variant="outlined" color="secondary" onClick={checkOther}> Check Other Result</Button>
+        </div>}
+        {show &&
+          <div style={{ marginTop: "20px" }} className={classes.center}>
+          <Container className={classes.root}>
             <Typography align="center" variant="h4" gutterBottom>
                 Result for Semester
         </Typography>
@@ -108,15 +145,14 @@ const ResultForm = ({sem,marksArr,funcCall}) => {
             <div className={classes.center}>
         
               <div>
-                  <h5>Name: Example Student  </h5>
-                <h5>Batch: CS 2019</h5>
-                <h5>Roll No. : LXY2999100 </h5>
-                <h5>CGPA: 8.7 </h5>
-                <h5>Semester: 1 </h5>
+                  <h5>Name: {name}  </h5>
+                  <h5>Batch: {batch}</h5>
+                <h5>Roll No. : {rollNo} </h5>
+                <h5>Semester: {sem} </h5>
               </div>
 
               <div className={classes.divs}>
-                <img src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiHtdakfs0OGh1nAVPxfxSzZQ6_ahfebaLKg&usqp=CAU"} style={{ width: "120px", height: "120px", border: "2px solid black" }} alt="img" />
+             <img className={classes.img} src={photoSrc} alt={name}/>
               </div>
           
             </div>
@@ -145,7 +181,9 @@ const ResultForm = ({sem,marksArr,funcCall}) => {
                     </TableCell>
                     <TableCell align="right">{row.marks}</TableCell>
                     <TableCell align="right">100</TableCell>
-                    <TableCell align="right">A</TableCell>
+                    { 
+                    <TableCell align="right">{getGrades(row.marks)}</TableCell>
+                     } 
                   </TableRow>
                 ))}
               </TableBody>
@@ -162,7 +200,9 @@ const ResultForm = ({sem,marksArr,funcCall}) => {
           color="secondary"
         >Download Result</Button>
         </div>
-        </Container>}
+          </Container>
+        </div>
+        }
         </>
       );
 }

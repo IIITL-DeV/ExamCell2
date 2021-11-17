@@ -2,9 +2,10 @@ import { Grid, makeStyles, Typography } from '@material-ui/core'
 import React, {  useState }from 'react'
 import { db, useAuth } from '../../init-firebase'
 import LayoutFaculty from '../LayoutFaculty'
-import Query from '../Student/Query'
+import Query from './Query'
 import { collection,  getDocs, query, where } from '@firebase/firestore';
 import { Refresh } from '@material-ui/icons'
+import CustomSnackbar from '../Snackbar/Snackbar'
 
 
 const useStyles = makeStyles({
@@ -20,44 +21,13 @@ const useStyles = makeStyles({
 })
 
 
-
-// const queryArr = [
-
-//     {
-//         id: '1',
-//         title: "Example title of Query",
-//         rollNo: "abc20iikl",
-//         content: "I am a sample query detail  I am a sample query detail ",
-        
-//     },
-//     {
-//         id: '2',
-//         title: "Example title of Query",
-//         rollNo: "abc20kloo",
-//         content: "I am a sample query detail  I am a sample query detail ",
-        
-//     },
-//     {
-//         id: '3',
-//         title: "Example title of Query",
-//         rollNo: "abc20pill",
-//         content: "I am a sample query detail  I am a sample query detail ",
-        
-//     },
-//     {
-//         id: '4',
-//         title: "Example title of Query",
-//         rollNo: "abc20kplm",
-//         content: "I am a sample query detail  I am a sample query detail ",
-        
-//     }
-// ]
-
 const ResolveQuery = () => {
 
     const [queriesArr, setQueriesArr] = useState([]);
     const currentUser = useAuth();
     const classes = useStyles();
+
+    const [open, setOpen] = useState(false);
 
     const fetchQueriesArr = async () => {
         console.log(currentUser.email);
@@ -76,9 +46,14 @@ const ResolveQuery = () => {
         }
     }
 
+    const doResponse = async() => {
+        fetchQueriesArr();
+        setOpen(true);
+    }
+   
     return (
         <LayoutFaculty>
-            
+            <CustomSnackbar open={open} setOpen={setOpen} message={"Response Submitted !"} />
             <Typography align="center" gutterBottom variant="h4">Unresolved Queries</Typography>
             <div className={classes.center}>
                 <Refresh
@@ -97,7 +72,7 @@ const ResolveQuery = () => {
                     
                         {queriesArr.map(quer => (
                             <Grid item xs={12} sm={6} md={4} lg={4} key={quer.id}>
-                                <Query quer={quer}/>
+                                <Query quer={quer} funCall={doResponse}/>
                             </Grid>
 
                         ))}

@@ -1,4 +1,3 @@
-import { ClassNames } from '@emotion/react'
 import { collection, doc, getDoc, getDocs, query, where } from '@firebase/firestore'
 import { Typography,Button, makeStyles, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
@@ -21,7 +20,8 @@ const useStyles = makeStyles({
         margin: "auto 20px",
         padding: "10px",
         background: "#fde2f7",
-        borderRadius:"40px"
+        borderRadius: "40px",
+        border:"2px solid pink"
     },
     formArea: {
         backgroundColor: "#f7c4e6",
@@ -100,7 +100,7 @@ const ResultCheck = () => {
         setAvailableResultList(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     }
 
-    const marksArr = [];
+    let marksArr = [];
     const showResult = () => {
         for (const key in data) {
             console.log(`${key}:${data[key]}`);
@@ -108,6 +108,10 @@ const ResultCheck = () => {
         }
         console.log(marksArr);
         setShow(true);
+    }
+    
+    const showResult2 = () => {
+        setShow(false);
     }
 
     useEffect(() => {
@@ -120,7 +124,7 @@ const ResultCheck = () => {
 
     return (
         <>
-            <div className={classes.center}>
+            {!show && <div className={classes.center}>
                 <Typography> Select Semester</Typography>
                 <FormControl className={classes.field} fullWidth>                        
 <InputLabel  style={{color:"#d500f9"}}  id="demo-simple-select-label">Semester</InputLabel>
@@ -143,12 +147,12 @@ const ResultCheck = () => {
 
                <Button variant="contained" color="secondary" className={classes.button} onClick={showResult}> Get Result</Button>
 
-            </div>
-            <div className={classes.center}>
+            </div>}
+            {/* <div style={{ marginTop: "20px" }} className={classes.center}> */}
                 {show &&
-                    <ResultForm sem={semester} funcCall={showResult} marksArr={marksArr}/>
+                    <ResultForm sem={semester} funcCall={showResult} funcCall2={showResult2} marksArr={marksArr}/>
                 }
-            </div>
+            {/* </div> */}
         </>
     )
 }

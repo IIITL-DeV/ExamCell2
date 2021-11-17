@@ -76,6 +76,7 @@ const EditToppers = () => {
     const [cgpa, setCgpa] = useState(0);
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState(false);
+    const [selected2, setSelected2] = useState(false);
     
     const updateTopper = async (id, name, batch, cgpa) => {
         
@@ -92,7 +93,8 @@ const EditToppers = () => {
     const onFileChange = (e) => {
         files = e.target.files;
         console.log(files[0]);
-         UploadPorcess();
+        UploadPorcess();
+        setSelected2(true);
     }
 
     // ---------------Upload Process----------------//
@@ -126,6 +128,7 @@ const EditToppers = () => {
                 getDownloadURL(UploadTask.snapshot.ref).then((downloadURL) => {
                     setLink(downloadURL);
                     setSelected(true);
+                    setSelected2(false);
             } )
         }
         );
@@ -230,10 +233,12 @@ const EditToppers = () => {
                             Upload Photo
                             </Button>
                             </label>
-                            {selected && <ImageIcon fontSize="large" style={{fill: "#d500f9"}}/>}
+                            {selected2 && <p>Uploading Image...</p>}
+                            {selected && <><p>Image Uploaded</p><ImageIcon fontSize="large" style={{fill: "#d500f9"}}/></>}
                         </div>
-
-                        <Button
+                                
+                            <Button
+                            disabled={selected2}
                             endIcon={<KeyboardArrowRightIcon/>}
                             variant="contained"
                             color="secondary"

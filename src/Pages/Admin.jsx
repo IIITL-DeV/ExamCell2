@@ -1,10 +1,13 @@
+import { Paper, Typography } from '@material-ui/core'
 import React from 'react'
 import LayoutAdmin from '../Components/LayoutAdmin'
 
 const Admin = () => {
     return (
         <LayoutAdmin>
-            I am admin
+            <Paper>
+                <Typography>Click on the options Provided</Typography>
+            </Paper>
         </LayoutAdmin>
     )
 }

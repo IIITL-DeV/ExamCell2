@@ -1,9 +1,11 @@
-import React, {   useState } from 'react'
+import React, {   useEffect, useState } from 'react'
 import { Button, Container, Divider, Grid,  makeStyles, Paper, TextField, Typography } from '@material-ui/core'
 import ResQuery from './ResQuery';
 import { KeyboardArrowRightRounded, Refresh } from '@material-ui/icons';
 import { addDoc, collection,  getDocs, query, where } from '@firebase/firestore';
 import { db, useAuth } from '../../init-firebase';
+import CustomSnackbar from '../Snackbar/Snackbar';
+import {doc,deleteDoc} from '@firebase/firestore'
 
 const useStyles = makeStyles({
     card: {
@@ -21,9 +23,12 @@ const useStyles = makeStyles({
     },
     center: {
         textAlign: "center",
-        margin: "auto",
-        padding: "5px"
-    },
+        margin: "auto 20px",
+        padding: "10px",
+        background: "#fde2f7",
+        borderRadius: "40px",
+        border:"2px solid pink"
+   },
     heading: {
         margin:"5px 35%",
         padding: "10px",
@@ -48,12 +53,13 @@ const SubmitQuery = () => {
     const [details, setDetails] = useState('')
     const [faculty, setFaculty] = useState('')
 
-    // const [clicked, setClicked] = useState(false);
+    const [clicked, setClicked] = useState(false);
 
     const [resolvedQ,setResolvedQ]=useState([])
     const [unresolvedQ,setUnresolvedQ]=useState([])
 
-
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
 
     const handleSubmit =  async (e) => {
         
@@ -63,7 +69,7 @@ const SubmitQuery = () => {
         // console.log("submited query!")
         
         const toFac = faculty + "@test.com";
-
+        
         try {
             await addDoc(collection(db, "queries"), {
                 title: title,
@@ -72,6 +78,7 @@ const SubmitQuery = () => {
                 to: toFac,
                 isResolved: false
             });
+            setOpen(true)
             setDetails("");
             setFaculty("");
             setTitle("");
@@ -80,15 +87,20 @@ const SubmitQuery = () => {
         } catch(err) {
             alert(err.message)
         }
-
-
-
+        
+        
+        
+    }
+    
+    const fetchAllQ=()=>{
+        fetchResolvedQ();
+        fetchUnresolvedQ();
+        setClicked(!clicked)
     }
 
 
-
     const fetchResolvedQ = async () => {
-        console.log(user?.email);
+        // console.log(user?.email);
         try {
             const queriesCollectionRef = collection(db, "queries");
             const q = query(queriesCollectionRef, where("from", "==", user.email),where("isResolved","==",true))
@@ -113,21 +125,38 @@ const SubmitQuery = () => {
             const snapshot = await getDocs(q);
             await setUnresolvedQ(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
             // console.log(unresolvedQ);
-
         } catch {
             alert("error!")
         }
     }
 
-    // useEffect(() => {
-    //     fetchResolvedQ();
-    //     fetchUnresolvedQ();
-    // }, [clicked]);
+    const handleDelete = async (id) => {
+        console.log(id);
+        try {
+            const docRef = doc(db, "queries", id);
+            await deleteDoc(docRef);
+            console.log("delted", id);
+            fetchResolvedQ();
+            fetchUnresolvedQ();
+            setOpen2(!open2);
+        } catch {
+            alert("Error Deleting")
+        }
+    }
+
+    useEffect(() => {
+        if (user?.email) {
+            fetchResolvedQ();
+            fetchUnresolvedQ();
+        }
+    }, []);
         
 
 
     return (
         <Container size="sm">
+        <CustomSnackbar open={open} setOpen={setOpen} message={"Query Submitted !"} />
+        <CustomSnackbar open={open2} setOpen={setOpen2} message={"Query Deleted !"} />
             <div className={classes.formArea}>
             <Paper
                     elevation={5}
@@ -210,14 +239,15 @@ const SubmitQuery = () => {
             </Paper>
             </div>
             </div>
-
-            <div>
+            {!clicked && <div style={{ marginTop: "20px" }} className={classes.center}><Button variant="outlined" color="secondary" onClick={fetchAllQ}>Show Previously made queries</Button></div>}
+            {clicked && <> <div>
             <Divider className={classes.field} />
 
             
-            <Typography
+            <div className={classes.center}>
+           <Typography
             
-                variant="h5"
+                variant="h4"
             color="textSecondary"
             component="h2"
                     gutterBottom
@@ -225,7 +255,6 @@ const SubmitQuery = () => {
             >
         Resolved Queries.
                 </Typography>
-            <div className={classes.center}>
                 <Refresh
                     
                     fontSize="large"
@@ -244,8 +273,8 @@ const SubmitQuery = () => {
         <Grid container spacing={3}>
                     
                     {resolvedQ.map(quer => (
-                        <Grid item xs={12} sm={6} md={4} lg={4} key={quer.id}>
-                            <ResQuery resolved={true} quer={quer} />
+                        <Grid item xs={12} sm={6} md={6} lg={6} key={quer.id}>
+                        <ResQuery resolved={true} quer={quer} funCall={() => { handleDelete(quer.id) }}/>
                             
                         </Grid>
 
@@ -258,9 +287,10 @@ const SubmitQuery = () => {
             <Divider className={classes.field} />
 
 
+            <div className={classes.center}>
             <Typography
             
-            variant="h5"
+            variant="h4"
             color="textSecondary"
             component="h2"
                 gutterBottom
@@ -268,7 +298,6 @@ const SubmitQuery = () => {
         >
         Unresolved Queries.
             </Typography>
-            <div className={classes.center}>
             <Refresh
                     
                     fontSize="large"
@@ -281,16 +310,19 @@ const SubmitQuery = () => {
                         backgroundColor:"pink"
                     }}
                 /></div>
+            <br />
         <Grid container spacing={3}>
                     
                     {unresolvedQ.map(quer => (
-                        <Grid item xs={12} sm={6} md={4} lg={4} key={quer.id}>
-                            <ResQuery resolved={false} quer={quer}/>
+                        <Grid item xs={12} sm={6} md={6} lg={6} key={quer.id}>
+                            <ResQuery resolved={false} quer={quer} funCall={() => { handleDelete(quer.id) }}/>
                         </Grid>
 
                     ))}
                     
-                </Grid>
+            </Grid></>
+                }
+            
 
         </Container>
     )

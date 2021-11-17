@@ -173,7 +173,7 @@ const AddMarks = () => {
             await updateDoc(
                 docRef,
                 {
-                    [subject]: { obtained, total }
+                    [subject]: obtained
                  } ,
                 { merge: true }
             )

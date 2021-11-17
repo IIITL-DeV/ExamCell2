@@ -84,7 +84,10 @@ const EditStudents = () => {
     const [rollnum, setRollnum] = useState(0);
 
     const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
     const [selected, setSelected] = useState(false);
+    const [selected2, setSelected2] = useState(false);
+
     
     const createStudent = async () => {
         
@@ -124,14 +127,15 @@ const EditStudents = () => {
 
         await deleteDoc(userDoc);
 
-        // setOpen(true);
+        setOpen2(true);
 
     }
 
     const onFileChange = (e) => {
         files = e.target.files;
         console.log(files[0]);
-         UploadPorcess();
+        UploadPorcess();
+        setSelected2(true);
     }
 
     // ---------------Upload Process----------------//
@@ -165,6 +169,7 @@ const EditStudents = () => {
                 getDownloadURL(UploadTask.snapshot.ref).then((downloadURL) => {
                     setPhoto(downloadURL);
                     setSelected(true);
+                    setSelected2(false);
             } )
         }
         );
@@ -185,6 +190,7 @@ const EditStudents = () => {
             <LayoutAdmin>
         
                 <CustomSnackbar open={open} setOpen={setOpen} message={"Added Succesfully !"} />
+                <CustomSnackbar open={open2} setOpen={setOpen2} message={"Student Deleted !"} />
 
                 <div className={classes.formArea}>
                 <Paper
@@ -316,10 +322,12 @@ const EditStudents = () => {
                             Upload Photo
                             </Button>
                             </label>
-                            {selected && <ImageIcon fontSize="large" style={{fill: "#d500f9"}}/>}
+                            {selected2 && <p>Uploading Image...</p>}
+                            {selected && <><p>Image Uploaded</p><ImageIcon fontSize="large" style={{fill: "#d500f9"}}/></>}
                         </div>
 
-                        <Button
+                            <Button
+                                disabled={selected2}
                             endIcon={<AddCircleOutline fontSize="large"/>}
                             variant="contained"
                             color="secondary"
